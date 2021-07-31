@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, unused_import
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +15,10 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   FirebaseAuth auth = FirebaseAuth.instance;
-  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _dobController = TextEditingController();
+  TextEditingController _genderController = TextEditingController();
+
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
@@ -95,6 +98,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                         ),
                         TextField(
+                          controller: _nameController,
                           autofocus: true,
                           keyboardType: TextInputType.emailAddress,
                           autocorrect: false,
