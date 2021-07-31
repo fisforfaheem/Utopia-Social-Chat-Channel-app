@@ -143,7 +143,7 @@ class _SignInState extends State<SignInPage> {
                               Get.snackbar(
                                   'error', ' user found ${user.email}');
 
-                              print('user =>' + '${user.email}');
+                              print('User =>' + '${user.email}');
                             }
                           } catch (e) {
                             print(e);
