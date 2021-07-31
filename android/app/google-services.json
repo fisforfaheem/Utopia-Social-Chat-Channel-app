@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "183896674348",
+    "project_id": "utopia-e004a",
+    "storage_bucket": "utopia-e004a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:183896674348:android:048043597c6cfc70174189",
+        "android_client_info": {
+          "package_name": "com.sampro.flutter_application_utopia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "183896674348-j8o0u0e3rqijnp1kskutcg7bsto2u3pl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjOZktG4ft1HVcWjiLAlHGO38ZmOFec5E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "183896674348-j8o0u0e3rqijnp1kskutcg7bsto2u3pl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
