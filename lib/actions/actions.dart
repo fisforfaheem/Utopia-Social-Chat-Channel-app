@@ -1,9 +1,19 @@
 // ignore_for_file: unused_element
 
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:scroll_date_picker/scroll_date_picker.dart';
+import 'package:flutter_application_utopia/model/user.dart';
+import 'package:flutter_application_utopia/screens/getstarted_screen.dart';
+import 'package:flutter_application_utopia/screens/imageuploadtest.dart';
+import 'package:flutter_application_utopia/screens/signin_screen.dart';
+import 'package:get/get.dart';
+
+import 'package:path/path.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 DateTime SelectedDate = DateTime(2021);
 funSignIp(email, pass) {
@@ -23,10 +33,56 @@ funcSignUp(email, pass, Map<String, dynamic> userJson) async {
     if (user != null) {
       print(user);
       FirebaseFirestore.instance.collection("users").add(userJson);
+      Get.offAll(GetStartedPage());
     }
   } catch (e) {
     print(e);
+    Get.snackbar("Alert !", e.toString());
   }
+}
+
+///file upload profile
+var task;
+Future uploadFile(file) async {
+  if (file == null) return;
+  print(file);
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  var name = pref.getString("email");
+  var uid = pref.getString("uid");
+  final fileName = name;
+  final destination = 'profileimages/$fileName';
+
+  try {
+    final ref = FirebaseStorage.instance.ref(destination);
+    print(name);
+    var jsonMap = await FirebaseFirestore.instance
+        .collection("users")
+        .where("email", isEqualTo: name!)
+        .get();
+
+    print(jsonMap.docs);
+
+    Users u = Users.fromMap(jsonMap.docs[0].data());
+    print(u);
+
+    u.pic = name!;
+
+    var jsonUpdated = u.toMap();
+
+    FirebaseFirestore.instance.collection("users").doc(uid).update(jsonUpdated);
+    return ref.putFile(file);
+  } on FirebaseException catch (e) {
+    Get.snackbar("Error", "$e");
+    print(e);
+    return null;
+  }
+
+  //if (task == null) return;
+
+  // final snapshot = await task!.whenComplete(() {});
+  // final urlDownload = await snapshot.ref.getDownloadURL();
+
+  // print('Download-Link: $urlDownload');
 }
 
 extension EmailValidator on String {
@@ -42,63 +98,4 @@ String? validateName(String value) {
     return "Name should not be empty";
   }
   return null;
-}
-
-///Date picker
-class Date extends StatefulWidget {
-  const Date({Key? key}) : super(key: key);
-
-  @override
-  _dateState createState() => _dateState();
-}
-
-class _dateState extends State<Date> {
-  late DatePickerController _controller;
-  DateTime _selectedDate = DateTime.now();
-  @override
-  void initState() {
-    super.initState();
-    _controller = DatePickerController(
-        initialDateTime: DateTime.now(), minYear: 1952, maxYear: 2025);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("DOB"),
-        centerTitle: true,
-      ),
-      body: Column(
-        children: [
-          Container(
-            height: 150.0,
-            alignment: Alignment.center,
-            child: Text(
-              "$_selectedDate",
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
-            ),
-          ),
-          ScrollDatePicker(
-            controller: _controller,
-            locale: DatePickerLocale.en_us,
-            pickerDecoration: BoxDecoration(
-                border: Border.all(color: Colors.blueAccent, width: 2.0)),
-            config: DatePickerConfig(
-                isLoop: true,
-                selectedTextStyle: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
-                    fontSize: 17.0)),
-            onChanged: (value) {
-              setState(() {
-                _selectedDate = value;
-                SelectedDate = _selectedDate;
-              });
-            },
-          ),
-        ],
-      ),
-    );
-  }
 }

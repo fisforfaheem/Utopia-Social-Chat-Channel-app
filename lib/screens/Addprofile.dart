@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_utopia/actions/actions.dart';
 import 'package:flutter_application_utopia/const/commonColor.dart';
 import 'package:flutter_application_utopia/screens/home_screen.dart';
 import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
@@ -43,6 +44,8 @@ class SignupCard extends StatefulWidget {
 
 class _SignupCardState extends State<SignupCard> {
   bool rdMale = true, rdFeMale = false;
+  File chosedFile = File("");
+  var task = null;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -89,26 +92,46 @@ class _SignupCardState extends State<SignupCard> {
                         child: CircleAvatar(
                           maxRadius: 110,
                           backgroundColor: Colors.black,
-                          child: CircleAvatar(
-                            backgroundImage:
-                                AssetImage("assets/images/splash.png"),
-                            maxRadius: 107,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Align(
-                                alignment: Alignment.bottomCenter,
-                                child: IconButton(
-                                  onPressed: () {
-                                    chooseDialog();
-                                  },
-                                  icon: Icon(
-                                    Icons.add_circle_outline,
-                                    size: 40,
+                          child: chosedFile.path != ""
+                              ? CircleAvatar(
+                                  maxRadius: 107,
+                                  backgroundImage: FileImage(chosedFile),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Align(
+                                      alignment: Alignment.bottomCenter,
+                                      child: IconButton(
+                                        onPressed: () {
+                                          chooseDialog();
+                                        },
+                                        icon: Icon(
+                                          Icons.add_circle_outline,
+                                          size: 40,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : CircleAvatar(
+                                  backgroundImage:
+                                      AssetImage("assets/images/splash.png"),
+                                  maxRadius: 107,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Align(
+                                      alignment: Alignment.bottomCenter,
+                                      child: IconButton(
+                                        onPressed: () {
+                                          chooseDialog();
+                                        },
+                                        icon: Icon(
+                                          Icons.add_circle_outline,
+                                          size: 40,
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                          ),
                         ),
                       ),
                     ),
@@ -133,11 +156,17 @@ class _SignupCardState extends State<SignupCard> {
                                 fontWeight: FontWeight.normal),
                           ),
                           onPressed: () {
-                            Get.offAll(HomeScreen());
+                            uploadFile(chosedFile);
+                            // Get.offAll(HomeScreen());
+                            //Get.offAll(HomeScreen());
                           },
                         ),
                       ),
                     ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    task != null ? buildUploadStatus() : Center(),
                   ],
                 ),
               ),
@@ -147,6 +176,38 @@ class _SignupCardState extends State<SignupCard> {
       ),
     );
   }
+
+  Widget buildUploadStatus() => StreamBuilder<TaskSnapshot>(
+        stream: task.snapshotEvents,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final snap = snapshot.data!;
+            final progress = snap.bytesTransferred / snap.totalBytes;
+            final percentage = (progress * 100).toStringAsFixed(2);
+
+            if (percentage == "100.0") Get.offAll(HomeScreen());
+            print(percentage);
+
+            return percentage != "100.0" || percentage != "0.0"
+                ? Column(
+                    children: [
+                      CircularProgressIndicator(),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          '$percentage %',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  )
+                : Container();
+          } else {
+            return Container();
+          }
+        },
+      );
 
   chooseDialog() {
     return showDialog(
@@ -166,6 +227,7 @@ class _SignupCardState extends State<SignupCard> {
                   InkWell(
                     onTap: () {
                       picker(ImageSource.gallery);
+                      Navigator.pop(context);
                     },
                     child: Row(
                       children: [
@@ -189,6 +251,7 @@ class _SignupCardState extends State<SignupCard> {
                   InkWell(
                     onTap: () {
                       picker(ImageSource.camera);
+                      Navigator.pop(context);
                     },
                     child: Row(
                       children: [
@@ -223,7 +286,7 @@ class _SignupCardState extends State<SignupCard> {
     setState(() {
       if (pickedFile != null) {
         //  this.IsImagePick = true;
-
+        chosedFile = File(pickedFile.path);
         //_image = File(pickedFile.path);
 
       } else {

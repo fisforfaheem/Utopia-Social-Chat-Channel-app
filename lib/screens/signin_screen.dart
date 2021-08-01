@@ -6,6 +6,7 @@ import 'package:flutter_application_utopia/const/commonColor.dart';
 import 'package:flutter_application_utopia/screens/Addprofile.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -18,6 +19,8 @@ class _SignInState extends State<SignInPage> {
   FirebaseAuth auth = FirebaseAuth.instance;
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+
+  bool passToggale = true;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -105,10 +108,21 @@ class _SignInState extends State<SignInPage> {
                           autofocus: true,
                           keyboardType: TextInputType.number,
                           autocorrect: false,
+                          obscureText: passToggale,
                           textCapitalization: TextCapitalization.words,
                           decoration: InputDecoration(
                               suffixIcon: IconButton(
-                                  onPressed: () {}, icon: Icon(Icons.lock)),
+                                onPressed: () {
+                                  setState(() {
+                                    passToggale = !passToggale;
+                                  });
+                                },
+                                icon: Icon(
+                                  Icons.remove_red_eye_rounded,
+                                  color:
+                                      passToggale ? Colors.grey : Colors.blue,
+                                ),
+                              ),
                               border: OutlineInputBorder(),
                               hintText: "Password",
                               labelStyle: TextStyle(color: Colors.black38),
@@ -146,17 +160,26 @@ class _SignInState extends State<SignInPage> {
                               password: _passwordController.text,
                             ))
                                 .user!;
+                            print(user);
                             if (user != null) {
+                              SharedPreferences pref =
+                                  await SharedPreferences.getInstance();
+                              pref.setString("email", user.email.toString());
+                              pref.setString("email", user.uid.toString());
+
                               Get.snackbar(
-                                  'error', ' user found ${user.email}');
-                              print('User =>' + '${user.email}');
+                                  'Found', ' user found ${user.email}');
+                              print('User =>' + '${user.uid}');
+
+                              Get.to(Addprofile());
                             }
                           } catch (e) {
                             print(e);
+                            Get.snackbar(
+                                'Error', '  Incorrect Email or Password !');
                             _emailController.text = "";
                             _passwordController.text = "";
                           }
-                          Get.to(Addprofile());
                         },
                       ),
                     ),

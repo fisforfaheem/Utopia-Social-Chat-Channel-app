@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_utopia/actions/actions.dart';
 import 'package:flutter_application_utopia/const/commonColor.dart';
 import 'package:flutter_application_utopia/model/user.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:passwordfield/passwordfield.dart';
-import 'package:scroll_date_picker/scroll_date_picker.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -19,13 +19,14 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   FirebaseAuth auth = FirebaseAuth.instance;
   TextEditingController _usernameController = TextEditingController();
-  TextEditingController _dobController = TextEditingController();
+  TextEditingController _dobController = TextEditingController(text: "DOB");
   TextEditingController _genderController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
-  int _radioValue = 0;
+  int _radioValue = 1;
   bool isMale = true;
+  bool passToggale = true;
 
   String selectedRole = 'Male';
 
@@ -148,9 +149,52 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ],
                     ),
-                    // SizedBox(
-                    //   height: 19,
-                    // ),
+                    SizedBox(
+                      height: 19,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Text(
+                            "Password",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        TextFormField(
+                          autovalidate: true,
+                          controller: _passwordController,
+                          autofocus: true,
+                          keyboardType: TextInputType.emailAddress,
+                          autocorrect: false,
+                          obscureText: passToggale,
+                          // textCapitalization: TextCapitalization.words,
+                          decoration: InputDecoration(
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    passToggale = !passToggale;
+                                  });
+                                },
+                                icon: Icon(
+                                  Icons.remove_red_eye_rounded,
+                                  color:
+                                      passToggale ? Colors.grey : Colors.blue,
+                                ),
+                              ),
+                              border: OutlineInputBorder(),
+                              hintText: "Password",
+                              labelStyle: TextStyle(color: Colors.black38),
+                              fillColor: Colors.black87),
+                          style: TextStyle(color: Colors.black87),
+                          validator: (input) => input!.length >= 6
+                              ? null
+                              : "password Should be 6 or more",
+                        ),
+                      ],
+                    ),
 
                     // Column(
                     //   mainAxisAlignment: MainAxisAlignment.start,
@@ -166,13 +210,15 @@ class _SignUpPageState extends State<SignUpPage> {
                     //     PasswordField(
                     //       controller: _passwordController,
                     //       border: OutlineInputBorder(),
+
                     //       hintText: "Password",
-                    //       errorMessage:
-                    //           'required atleast 6 chars and 1 number ',
-                    //       pattern: r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$',
+                    //       errorMessage: 'required atleast 6  ',
+                    //       pattern: r'^(?=.*[1-9 ])(?=.*\d)[1-9\d]{6,}$',
+                    //       // pattern: r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$',
                     //     ),
                     //   ],
                     // ),
+
                     SizedBox(
                       height: 19,
                     ),
@@ -228,7 +274,8 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                         ),
                         TextField(
-                          enabled: true,
+                          controller: _dobController,
+                          readOnly: true,
                           autofocus: true,
                           keyboardType: TextInputType.datetime,
                           autocorrect: false,
@@ -236,12 +283,31 @@ class _SignUpPageState extends State<SignUpPage> {
                           decoration: InputDecoration(
                               suffixIcon: IconButton(
                                   onPressed: () {
-                                    Get.to(Date());
-                                    SelectedDate;
+                                    DatePicker.showDatePicker(context,
+                                        showTitleActions: true,
+                                        minTime: DateTime(1900, 3, 5),
+                                        maxTime: DateTime(2019, 6, 7),
+                                        onChanged: (date) {
+                                      setState(() {
+                                        _dobController.text =
+                                            date.toString().split(' ')[0];
+                                        SelectedDate = date;
+                                      });
+                                      print('change $date');
+                                    }, onConfirm: (date) {
+                                      print('confirm $date');
+                                      setState(() {
+                                        _dobController.text =
+                                            date.toString().split(' ')[0];
+                                        SelectedDate = date;
+                                      });
+                                    },
+                                        currentTime: DateTime.now(),
+                                        locale: LocaleType.en);
                                   },
                                   icon: Icon(Icons.calendar_today)),
                               border: OutlineInputBorder(),
-                              hintText: "$SelectedDate",
+                              hintText: "${_dobController.text}",
                               labelStyle: TextStyle(color: Colors.black38),
                               fillColor: Colors.black87),
                           style: TextStyle(color: Colors.black87),
@@ -272,13 +338,15 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                         onPressed: () {
                           Map<String, dynamic> jsonY = Users(
+                            pic: "",
                             email: _emailController.text,
                             username: _usernameController.text,
                             dob: SelectedDate,
                             gender: selectedRole,
-                            password: "null",
+                            password: "",
                             isAllowed: true,
                           ).toMap();
+
                           funcSignUp(_emailController.text,
                               _passwordController.text, jsonY);
                         },
