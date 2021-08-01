@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:scroll_date_picker/scroll_date_picker.dart';
 
-String SelectedDate = 'null';
+DateTime SelectedDate = DateTime(2021);
 funSignIp(email, pass) {
   FirebaseFirestore.instance
       .collection("users")
@@ -93,7 +93,7 @@ class _dateState extends State<Date> {
             onChanged: (value) {
               setState(() {
                 _selectedDate = value;
-                SelectedDate = _selectedDate.toString();
+                SelectedDate = _selectedDate;
               });
             },
           ),

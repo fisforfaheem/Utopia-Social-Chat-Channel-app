@@ -136,7 +136,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           autofocus: true,
                           keyboardType: TextInputType.emailAddress,
                           autocorrect: false,
-                          textCapitalization: TextCapitalization.words,
+                          // textCapitalization: TextCapitalization.words,
                           decoration: InputDecoration(
                               border: OutlineInputBorder(),
                               hintText: "Email",
@@ -228,6 +228,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                         ),
                         TextField(
+                          enabled: true,
                           autofocus: true,
                           keyboardType: TextInputType.datetime,
                           autocorrect: false,
@@ -273,7 +274,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           Map<String, dynamic> jsonY = Users(
                             email: _emailController.text,
                             username: _usernameController.text,
-                            dob: DateTime.now(),
+                            dob: SelectedDate,
                             gender: selectedRole,
                             password: _passwordController.text,
                             isAllowed: true,

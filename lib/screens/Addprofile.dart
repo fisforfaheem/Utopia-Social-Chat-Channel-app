@@ -175,7 +175,7 @@ class _SignupCardState extends State<SignupCard> {
                         ),
                         Text(
                           "Select From Gallery ",
-                          style: TextStyle(fontSize: 25),
+                          style: TextStyle(fontSize: 15),
                         )
                       ],
                     ),
@@ -198,7 +198,7 @@ class _SignupCardState extends State<SignupCard> {
                         ),
                         Text(
                           "Take From Camera ",
-                          style: TextStyle(fontSize: 25),
+                          style: TextStyle(fontSize: 15),
                         )
                       ],
                     ),

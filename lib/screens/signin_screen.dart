@@ -1,5 +1,9 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
+import 'package:flutter_application_utopia/actions/actions.dart';
 import 'package:flutter_application_utopia/const/commonColor.dart';
+import 'package:flutter_application_utopia/screens/Addprofile.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -63,18 +67,21 @@ class _SignInState extends State<SignInPage> {
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
-                        TextField(
+                        TextFormField(
+                          autovalidate: true,
                           controller: _emailController,
                           autofocus: true,
                           keyboardType: TextInputType.emailAddress,
                           autocorrect: false,
-                          textCapitalization: TextCapitalization.words,
+                          // textCapitalization: TextCapitalization.words,
                           decoration: InputDecoration(
                               border: OutlineInputBorder(),
                               hintText: "Email",
                               labelStyle: TextStyle(color: Colors.black38),
                               fillColor: Colors.black87),
                           style: TextStyle(color: Colors.black87),
+                          validator: (input) =>
+                              input!.isValidEmail() ? null : "Check your email",
                         ),
                       ],
                     ),
@@ -149,7 +156,7 @@ class _SignInState extends State<SignInPage> {
                             _emailController.text = "";
                             _passwordController.text = "";
                           }
-                          // Get.to(Addprofile());
+                          Get.to(Addprofile());
                         },
                       ),
                     ),

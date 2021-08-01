@@ -41,6 +41,8 @@ dependencies:
   passwordfield: ^0.0.82
   email_validator: ^2.0.1
   scroll_date_picker: ^2.0.4
+  firebase_storage: ^10.0.1
+  firebase_analytics: ^5.0.6
   
 
 dev_dependencies:
