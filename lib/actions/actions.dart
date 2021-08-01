@@ -43,7 +43,7 @@ funcSignUp(email, pass, Map<String, dynamic> userJson) async {
 
 ///file upload profile
 var task;
-Future uploadFile(file) async {
+Future uploadFile(File file) async {
   if (file == null) return;
   print(file);
   SharedPreferences pref = await SharedPreferences.getInstance();
@@ -57,19 +57,27 @@ Future uploadFile(file) async {
     print(name);
     var jsonMap = await FirebaseFirestore.instance
         .collection("users")
-        .where("email", isEqualTo: name!)
+        .where('email', isEqualTo: name.toString())
         .get();
+    // .where("email", isEqualTo: name!)
+    // .get();
 
-    print(jsonMap.docs);
+    var exeT = file.path.split('/').last.split('.').last;
+
+    print(jsonMap.docs[0].data());
+    var docId = jsonMap.docs.first.id;
 
     Users u = Users.fromMap(jsonMap.docs[0].data());
-    print(u);
+    print(docId + " .... Get");
 
-    u.pic = name!;
+    u.pic = name! + "." + exeT;
 
     var jsonUpdated = u.toMap();
 
-    FirebaseFirestore.instance.collection("users").doc(uid).update(jsonUpdated);
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(docId)
+        .update(jsonUpdated);
     return ref.putFile(file);
   } on FirebaseException catch (e) {
     Get.snackbar("Error", "$e");

@@ -35,7 +35,7 @@ class Users {
     return Users(
       email: map['email'],
       username: map['username'],
-      dob: DateTime.fromMillisecondsSinceEpoch(map['dob']),
+      dob: DateTime.parse(map['dob']),
       gender: map['gender'],
       password: map['password'],
       isAllowed: map['isAllowed'],

@@ -154,6 +154,7 @@ class _SignInState extends State<SignInPage> {
                         ),
                         onPressed: () async {
                           try {
+                            print("enter");
                             User user = (await FirebaseAuth.instance
                                     .signInWithEmailAndPassword(
                               email: _emailController.text,
@@ -165,7 +166,7 @@ class _SignInState extends State<SignInPage> {
                               SharedPreferences pref =
                                   await SharedPreferences.getInstance();
                               pref.setString("email", user.email.toString());
-                              pref.setString("email", user.uid.toString());
+                              pref.setString("uid", user.uid.toString());
 
                               Get.snackbar(
                                   'Found', ' user found ${user.email}');

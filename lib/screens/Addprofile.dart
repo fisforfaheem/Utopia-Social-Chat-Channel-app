@@ -157,7 +157,7 @@ class _SignupCardState extends State<SignupCard> {
                           ),
                           onPressed: () {
                             uploadFile(chosedFile);
-                            // Get.offAll(HomeScreen());
+                            Get.offAll(HomeScreen());
                             //Get.offAll(HomeScreen());
                           },
                         ),
