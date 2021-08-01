@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, unused_import, deprecated_member_use, import_of_legacy_library_into_null_safe
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, unused_import, deprecated_member_use, import_of_legacy_library_into_null_safe, unnecessary_statements
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:passwordfield/passwordfield.dart';
+import 'package:scroll_date_picker/scroll_date_picker.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -228,15 +229,18 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                         TextField(
                           autofocus: true,
-                          keyboardType: TextInputType.emailAddress,
+                          keyboardType: TextInputType.datetime,
                           autocorrect: false,
                           textCapitalization: TextCapitalization.words,
                           decoration: InputDecoration(
                               suffixIcon: IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Get.to(Date());
+                                    SelectedDate;
+                                  },
                                   icon: Icon(Icons.calendar_today)),
                               border: OutlineInputBorder(),
-                              hintText: "DOB",
+                              hintText: "$SelectedDate",
                               labelStyle: TextStyle(color: Colors.black38),
                               fillColor: Colors.black87),
                           style: TextStyle(color: Colors.black87),

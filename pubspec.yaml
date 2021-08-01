@@ -40,6 +40,7 @@ dependencies:
   cloud_firestore: ^2.4.0
   passwordfield: ^0.0.82
   email_validator: ^2.0.1
+  scroll_date_picker: ^2.0.4
   
 
 dev_dependencies:
