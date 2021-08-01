@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_utopia/actions/actions.dart';
 import 'package:flutter_application_utopia/const/commonColor.dart';
 import 'package:flutter_application_utopia/screens/Addprofile.dart';
+import 'package:flutter_application_utopia/screens/home_screen.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -166,13 +167,16 @@ class _SignInState extends State<SignInPage> {
                               SharedPreferences pref =
                                   await SharedPreferences.getInstance();
                               pref.setString("email", user.email.toString());
-                              pref.setString("uid", user.uid.toString());
 
                               Get.snackbar(
                                   'Found', ' user found ${user.email}');
                               print('User =>' + '${user.uid}');
 
-                              Get.to(Addprofile());
+                              var isPicUploaded = pref.getBool("isPicUploaded");
+                              if (isPicUploaded == true)
+                                Get.offAll(HomeScreen());
+                              else
+                                Get.to(Addprofile());
                             }
                           } catch (e) {
                             print(e);

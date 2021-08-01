@@ -12,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:firebase_storage/firebase_storage.dart'; // For File Upload To Firestore
 import 'package:path/path.dart' as Path;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Addprofile extends StatelessWidget {
   @override
@@ -46,6 +47,7 @@ class _SignupCardState extends State<SignupCard> {
   bool rdMale = true, rdFeMale = false;
   File chosedFile = File("");
   var task = null;
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -155,9 +157,17 @@ class _SignupCardState extends State<SignupCard> {
                                 color: Colors.black,
                                 fontWeight: FontWeight.normal),
                           ),
-                          onPressed: () {
-                            uploadFile(chosedFile);
-                            Get.offAll(HomeScreen());
+                          onPressed: () async {
+                            if (chosedFile.path != "") {
+                              uploadFile(chosedFile);
+                              SharedPreferences pref =
+                                  await SharedPreferences.getInstance();
+
+                              pref.setBool("isPicUploaded", true);
+                              Get.offAll(HomeScreen());
+                            } else {
+                              Get.snackbar("Alert !", "Please Pick Image ");
+                            }
                             //Get.offAll(HomeScreen());
                           },
                         ),

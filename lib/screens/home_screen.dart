@@ -1,4 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_utopia/actions/actions.dart';
+import 'package:flutter_application_utopia/actions/getController.dart';
 import 'package:flutter_application_utopia/const/navBar.dart';
 import 'package:flutter_application_utopia/const/commonColor.dart';
 import 'package:flutter_application_utopia/screens/channel_page.dart';
@@ -13,6 +18,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Get.put(HomeController());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,33 +65,66 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(
             height: 20,
           ),
-          Expanded(
-              child: ListView.builder(
-                  itemCount: 3,
-                  itemBuilder: (ctx, index) {
-                    return InkWell(
-                      onTap: () {
-                        Get.to(ChannelPage(ind: index));
+          FutureBuilder(
+            future: FirebaseFirestore.instance.collection("server").get(),
+            builder: (ctx, AsyncSnapshot snap) {
+              if (snap.connectionState == ConnectionState.waiting)
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              QuerySnapshot data = snap.data;
+              print(data.docs.length);
+              if (snap.hasData)
+                return Container(
+                  child: Expanded(
+                    child: ListView.builder(
+                      itemCount: data.docs.length,
+                      itemBuilder: (ctx, index) {
+                        return InkWell(
+                          onTap: () {
+                            Get.to(ChannelPage(ind: index));
+                          },
+                          child: listCard(index, data.docs[index].data()),
+                        );
                       },
-                      child: listCard(index),
-                    );
-                  })),
+                    ),
+                  ),
+                );
+              else
+                return Center(
+                  child: Text("No Server Found ..."),
+                );
+            },
+          ),
         ],
       ),
     );
   }
 
-  listCard(index) {
+  listCard(index, mapData) {
+    print(mapData['pic']);
+    var url =
+        "https://firebasestorage.googleapis.com/v0/b/utopia-e004a.appspot.com/o/server%2F" +
+            mapData['pic'] +
+            "?alt=media&token=f20eb667-3de9-4855-be52-89f1393fc649";
+    //String url = getImageUrl("server/" + mapData['pic']);
+    print(url);
     return Container(
       color: grey.withOpacity(0.27),
       padding: EdgeInsets.symmetric(vertical: 7),
       margin: EdgeInsets.symmetric(horizontal: 20, vertical: 7),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundImage: AssetImage("assets/images/splash.png"),
+          radius: 22,
+          child: CachedNetworkImage(
+            imageUrl: url,
+            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                CircularProgressIndicator(value: downloadProgress.progress),
+            errorWidget: (context, url, error) => Icon(Icons.error),
+          ),
         ),
         title: Text(
-          "Server ${index + 1}",
+          "${mapData['name']}",
           style: TextStyle(color: Colors.black),
         ),
         trailing: Container(

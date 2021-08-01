@@ -41,8 +41,39 @@ funcSignUp(email, pass, Map<String, dynamic> userJson) async {
   }
 }
 
+//// create server
+Future createnewServer(File file, name) async {
+  if (file == null) return;
+
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  var email = pref.getString("email");
+
+  var exeT = file.path.split('/').last.split('.').last;
+  final fileName = name + "." + exeT;
+  final destination = 'server/$fileName';
+
+  try {
+    final ref = FirebaseStorage.instance.ref(destination);
+
+    await FirebaseFirestore.instance.collection("server").add({
+      "name": name.toString(),
+      "pic": fileName.toString(),
+      "createdBy": email,
+    });
+
+    return await ref.putFile(file);
+  } on FirebaseException catch (e) {
+    Get.snackbar("Error", "$e");
+    print(e);
+    return null;
+  }
+}
+
+///get all servers
+
 ///file upload profile
-var task;
+///
+
 Future uploadFile(File file) async {
   if (file == null) return;
   print(file);
@@ -78,6 +109,7 @@ Future uploadFile(File file) async {
         .collection("users")
         .doc(docId)
         .update(jsonUpdated);
+
     return ref.putFile(file);
   } on FirebaseException catch (e) {
     Get.snackbar("Error", "$e");
@@ -91,6 +123,12 @@ Future uploadFile(File file) async {
   // final urlDownload = await snapshot.ref.getDownloadURL();
 
   // print('Download-Link: $urlDownload');
+}
+
+getImageUrl(filename) {
+  var ref = FirebaseStorage.instance.ref().child(filename);
+  var url = ref.getDownloadURL();
+  return url;
 }
 
 extension EmailValidator on String {
