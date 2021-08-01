@@ -142,14 +142,12 @@ class _SignInState extends State<SignInPage> {
                             if (user != null) {
                               Get.snackbar(
                                   'error', ' user found ${user.email}');
-
                               print('User =>' + '${user.email}');
                             }
                           } catch (e) {
                             print(e);
                             _emailController.text = "";
                             _passwordController.text = "";
-                            // TODO: AlertDialog with error
                           }
                           // Get.to(Addprofile());
                         },

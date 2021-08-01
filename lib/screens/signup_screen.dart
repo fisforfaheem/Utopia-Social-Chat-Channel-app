@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, unused_import
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, unused_import, deprecated_member_use, import_of_legacy_library_into_null_safe
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +7,8 @@ import 'package:flutter_application_utopia/const/commonColor.dart';
 import 'package:flutter_application_utopia/model/user.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:email_validator/email_validator.dart';
+import 'package:passwordfield/passwordfield.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -15,10 +17,9 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   FirebaseAuth auth = FirebaseAuth.instance;
-  TextEditingController _nameController = TextEditingController();
+  TextEditingController _usernameController = TextEditingController();
   TextEditingController _dobController = TextEditingController();
   TextEditingController _genderController = TextEditingController();
-
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
@@ -97,13 +98,14 @@ class _SignUpPageState extends State<SignUpPage> {
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
-                        TextField(
-                          controller: _nameController,
+                        TextFormField(
+                          controller: _usernameController,
                           autofocus: true,
-                          keyboardType: TextInputType.emailAddress,
+                          keyboardType: TextInputType.name,
                           autocorrect: false,
                           textCapitalization: TextCapitalization.words,
                           decoration: InputDecoration(
+                              errorText: validateName(_usernameController.text),
                               border: OutlineInputBorder(),
                               hintText: "Name",
                               labelStyle: TextStyle(color: Colors.black38),
@@ -127,7 +129,8 @@ class _SignUpPageState extends State<SignUpPage> {
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
-                        TextField(
+                        TextFormField(
+                          autovalidate: true,
                           controller: _emailController,
                           autofocus: true,
                           keyboardType: TextInputType.emailAddress,
@@ -139,6 +142,8 @@ class _SignUpPageState extends State<SignUpPage> {
                               labelStyle: TextStyle(color: Colors.black38),
                               fillColor: Colors.black87),
                           style: TextStyle(color: Colors.black87),
+                          validator: (input) =>
+                              input!.isValidEmail() ? null : "Check your email",
                         ),
                       ],
                     ),
@@ -157,21 +162,13 @@ class _SignUpPageState extends State<SignUpPage> {
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
-                        TextField(
+                        PasswordField(
                           controller: _passwordController,
-                          autofocus: true,
-                          keyboardType: TextInputType.number,
-                          autocorrect: false,
-                          textCapitalization: TextCapitalization.words,
-                          decoration: InputDecoration(
-                              suffixIcon: IconButton(
-                                  onPressed: () async {},
-                                  icon: Icon(Icons.lock)),
-                              border: OutlineInputBorder(),
-                              hintText: "Password",
-                              labelStyle: TextStyle(color: Colors.black38),
-                              fillColor: Colors.black87),
-                          style: TextStyle(color: Colors.black87),
+                          border: OutlineInputBorder(),
+                          hintText: "Password",
+                          errorMessage:
+                              'required atleast 6 chars and 1 number ',
+                          pattern: r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$',
                         ),
                       ],
                     ),
@@ -270,13 +267,13 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                         onPressed: () {
                           Map<String, dynamic> jsonY = Users(
-                                  email: _emailController.text,
-                                  username: "username",
-                                  dob: DateTime.now(),
-                                  gender: "male",
-                                  password: _passwordController.text,
-                                  isAllowed: true)
-                              .toMap();
+                            email: _emailController.text,
+                            username: _usernameController.text,
+                            dob: DateTime.now(),
+                            gender: selectedRole,
+                            password: _passwordController.text,
+                            isAllowed: true,
+                          ).toMap();
                           funcSignUp(_emailController.text,
                               _passwordController.text, jsonY);
                         },
