@@ -72,55 +72,12 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                 Padding(
                   padding: EdgeInsets.all(20),
                   child: Container(
-                    height: MediaQuery.of(context).size.height - 230,
+                    height: MediaQuery.of(context).size.height,
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(16, 20, 16, 0),
-                          child: TextFormField(
-                            style: TextStyle(),
-                            obscureText: false,
-                            decoration: InputDecoration(
-                              fillColor: Colors.white,
-                              filled: true,
-                              hintText: 'Name',
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.white,
-                                  width: 1,
-                                ),
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(8),
-                                  bottomRight: Radius.circular(8),
-                                  topLeft: Radius.circular(8),
-                                  topRight: Radius.circular(8),
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.white,
-                                  width: 1,
-                                ),
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(8),
-                                  bottomRight: Radius.circular(8),
-                                  topLeft: Radius.circular(8),
-                                  topRight: Radius.circular(8),
-                                ),
-                              ),
-                            ),
-                            validator: (val) {
-                              if (val!.isEmpty) {
-                                return 'Please fill in a valid Name';
-                              }
-
-                              return null;
-                            },
-                          ),
-                        ),
                         getCustomeTextField(
                             "UserName", "Please Enter UserName !"),
                         getCustomeTextField("Email", "Please Enter Email !"),
@@ -183,7 +140,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                           ),
                           child: TextButton(
                             child: Text(
-                              'Sign In',
+                              'Update Profile',
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 25,
