@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
 
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_utopia/const/commonColor.dart';
@@ -10,6 +9,8 @@ import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:firebase_storage/firebase_storage.dart'; // For File Upload To Firestore
+import 'package:path/path.dart' as Path;
 
 class Addprofile extends StatelessWidget {
   @override
@@ -34,6 +35,8 @@ class ProfileState extends StatelessWidget {
 }
 
 class SignupCard extends StatefulWidget {
+  late File _image;
+  late String _uploadedFileURL;
   @override
   _SignupCardState createState() => _SignupCardState();
 }
