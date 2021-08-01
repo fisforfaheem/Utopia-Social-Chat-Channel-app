@@ -102,41 +102,37 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   listCard(index, mapData) {
-    print(mapData['pic']);
-    var url =
-        "https://firebasestorage.googleapis.com/v0/b/utopia-e004a.appspot.com/o/server%2F" +
-            mapData['pic'] +
-            "?alt=media&token=f20eb667-3de9-4855-be52-89f1393fc649";
-    //String url = getImageUrl("server/" + mapData['pic']);
-    print(url);
-    return Container(
-      color: grey.withOpacity(0.27),
-      padding: EdgeInsets.symmetric(vertical: 7),
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 7),
-      child: ListTile(
-        leading: CircleAvatar(
-          radius: 22,
-          child: CachedNetworkImage(
-            imageUrl: url,
-            progressIndicatorBuilder: (context, url, downloadProgress) =>
-                CircularProgressIndicator(value: downloadProgress.progress),
-            errorWidget: (context, url, error) => Icon(Icons.error),
-          ),
-        ),
-        title: Text(
-          "${mapData['name']}",
-          style: TextStyle(color: Colors.black),
-        ),
-        trailing: Container(
-            color: Colors.black,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "${index + 1}",
-                style: TextStyle(color: Colors.white),
+    return FutureBuilder(
+        future: getImageUrl("server/" + mapData['pic']),
+        builder: (context, snapshot) {
+          print("......... " + snapshot.data.toString());
+
+          return Container(
+            color: grey.withOpacity(0.27),
+            padding: EdgeInsets.symmetric(vertical: 7),
+            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 7),
+            child: ListTile(
+              leading: CircleAvatar(
+                radius: 22,
+                backgroundImage: NetworkImage(
+                  snapshot.data.toString(),
+                ),
               ),
-            )),
-      ),
-    );
+              title: Text(
+                "${mapData['name']}",
+                style: TextStyle(color: Colors.black),
+              ),
+              trailing: Container(
+                  color: Colors.black,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "${index + 1}",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )),
+            ),
+          );
+        });
   }
 }
