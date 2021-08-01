@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_application_utopia/const/commonColor.dart';
 import 'package:flutter_application_utopia/screens/signin_screen.dart';
-import 'package:flutter_application_utopia/screens/signin_screen_faheem.dart';
 import 'package:flutter_application_utopia/screens/signup_screen.dart';
 //import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
