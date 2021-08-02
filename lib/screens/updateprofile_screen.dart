@@ -25,11 +25,11 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
   TextEditingController _phonenumberController = TextEditingController();
   // TextEditingController _passwordController = TextEditingController();
 
-  getCurrentUserData() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.setString("email", user.email.toString());
-    pref.setString("pic", user.photoURL.toString());
-  }
+  // getCurrentUserData() async {
+  //   SharedPreferences pref = await SharedPreferences.getInstance();
+  //   pref.setString("email",user.email.toString());
+  //   pref.setString("pic", user.photoURL.toString());
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -171,24 +171,4 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
       ),
     );
   }
-}
-
-listCard(mapData) {
-  return FutureBuilder(
-      future: getImageUrl("profileimages/" + mapData['pic']),
-      builder: (context, snapshot) {
-        print("......... " + snapshot.data.toString());
-
-        return Container(
-          color: grey.withOpacity(0.27),
-          padding: EdgeInsets.symmetric(vertical: 7),
-          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 7),
-          child: CircleAvatar(
-            radius: 22,
-            backgroundImage: NetworkImage(
-              snapshot.data.toString(),
-            ),
-          ),
-        );
-      });
 }

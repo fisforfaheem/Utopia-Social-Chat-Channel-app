@@ -144,25 +144,3 @@ String? validateName(String value) {
   }
   return null;
 }
-
-getCurrentUserData() async {
-  SharedPreferences pref = await SharedPreferences.getInstance();
-  pref.setString("email", user.email.toString());
-  pref.setString("pic", user.photoURL.toString());
-}
-
-//Update User Data
-Future<void> updateUserData(String sugars, String name, int strength) async {
-  return await users.document(uid).setData({
-    'sugars': sugars,
-    'name': name,
-    'strength': strength,
-  });
-}
-
-// user data from snapshots
-UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
-  return UserData(
-    uid: uid,
-  );
-}
