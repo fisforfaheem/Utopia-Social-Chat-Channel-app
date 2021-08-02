@@ -131,47 +131,23 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                                   fontWeight: FontWeight.normal),
                             ),
                             onPressed: () {
-                              //Update User Pofile
-
                               var collection = FirebaseFirestore.instance
                                   .collection('users');
                               collection
                                   .doc(
-                                      'qZ4W6khw1fMQV18QXGH5') // <-- Doc ID where data should be updated.
+                                      'qZ4W6khw1fMQV18QXGH5') //ask faizan to make it dynamic(fetch Docid)
                                   .update({
                                     'name': _nameController.text,
                                     'username': _usernameController.text,
                                     'email': _emailController.text,
                                     'phonenumber': _phonenumberController.text,
                                     //'password': '$_usernameController',
-                                  }) // <-- Updated data
+                                  })
                                   .then((_) => print('Updated'))
                                   .catchError((error) =>
                                       print('Update failed: $error'));
                             },
                           ),
-                        ),
-                        FutureBuilder(
-                          future: FirebaseFirestore.instance
-                              .collection("profileimages")
-                              .get(),
-                          builder: (ctx, AsyncSnapshot snap) {
-                            if (snap.connectionState == ConnectionState.waiting)
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            QuerySnapshot data = snap.data;
-                            print(data.docs.length);
-                            if (snap.hasData)
-                              return Container(
-                                child: Expanded(
-                                  child: Center(),
-                                  // child: listCard(data.docs[index].data()),
-                                ),
-                              );
-                            else
-                              return Center();
-                          },
                         ),
                         SizedBox(
                           height: 19,
