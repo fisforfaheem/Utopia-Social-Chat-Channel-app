@@ -98,7 +98,9 @@ class _HomeScreenState extends State<ChannelPage> {
       margin: EdgeInsets.symmetric(horizontal: 20, vertical: 7),
       child: ListTile(
         onTap: () {
-          Get.to(MessageScreen());
+          Get.to(MessageScreen(
+            channelName: jsonMap['name'],
+          ));
         },
         leading: CircleAvatar(
           backgroundImage: AssetImage("assets/images/splash.png"),

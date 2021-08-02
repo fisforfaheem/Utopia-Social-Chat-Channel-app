@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-getCustomeTextField(hint, error) {
+getCustomeTextField(hint, error, controller) {
   return Padding(
     padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
     child: TextFormField(
+      controller: controller,
       obscureText: false,
       decoration: InputDecoration(
         hintText: hint,

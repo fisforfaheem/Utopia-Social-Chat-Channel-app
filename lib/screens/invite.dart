@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_utopia/const/commonColor.dart';
 import 'package:flutter_application_utopia/const/common_widgets.dart';
-import 'package:get/get.dart';
 
 class Invite extends StatefulWidget {
   @override
@@ -11,6 +10,7 @@ class Invite extends StatefulWidget {
 }
 
 class _AddAFriendPageState extends State<Invite> {
+  final linkController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -91,8 +91,8 @@ class _AddAFriendPageState extends State<Invite> {
                         Container(
                           padding: EdgeInsets.symmetric(
                               horizontal: 16, vertical: 16),
-                          child:
-                              getCustomeTextField("https://myinvitelink/", ""),
+                          child: getCustomeTextField(
+                              "https://myinvitelink/", "", linkController),
                         ),
                         Container(
                           margin: EdgeInsets.symmetric(horizontal: 20),

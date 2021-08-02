@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_utopia/const/commonColor.dart';
 import 'package:flutter_application_utopia/const/common_widgets.dart';
+import 'package:flutter_application_utopia/screens/search_screen.dart';
 import 'package:get/get.dart';
 
 class AddAFriendPage extends StatefulWidget {
@@ -15,6 +16,7 @@ class AddAFriendPage extends StatefulWidget {
 }
 
 class _AddAFriendPageState extends State<AddAFriendPage> {
+  final userName = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -94,7 +96,8 @@ class _AddAFriendPageState extends State<AddAFriendPage> {
                         Container(
                           padding: EdgeInsets.symmetric(
                               horizontal: 16, vertical: 16),
-                          child: getCustomeTextField("UserName", "Enter name "),
+                          child: getCustomeTextField(
+                              "UserName", "Enter name ", userName),
                         ),
                         Container(
                           margin: EdgeInsets.symmetric(horizontal: 20),
@@ -114,7 +117,10 @@ class _AddAFriendPageState extends State<AddAFriendPage> {
                                   color: Colors.black,
                                   fontWeight: FontWeight.normal),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              Get.offAll(
+                                  SearchScreen(searchText: userName.text));
+                            },
                           ),
                         ),
                       ],

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_utopia/const/commonColor.dart';
 import 'package:flutter_application_utopia/screens/addafriendscreen.dart';
+import 'package:flutter_application_utopia/screens/invite.dart';
 import 'package:get/get.dart';
 
 class MessageScreen extends StatefulWidget {
-  const MessageScreen({Key? key}) : super(key: key);
+  final channelName;
+  const MessageScreen({Key? key, this.channelName}) : super(key: key);
 
   @override
   _MessageScreenState createState() => _MessageScreenState();
@@ -17,13 +19,13 @@ class _MessageScreenState extends State<MessageScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: Text(
-          "Channel 1",
+          "${widget.channelName}",
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
-            Get.to(AddAFriendPage());
+            Get.to(Invite());
           },
           icon: Icon(Icons.person_add, color: Colors.white),
         ),

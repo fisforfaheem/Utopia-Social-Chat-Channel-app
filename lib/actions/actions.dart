@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_utopia/model/friends.dart';
 import 'package:flutter_application_utopia/model/server.dart';
 import 'package:flutter_application_utopia/model/user.dart';
 import 'package:flutter_application_utopia/screens/getstarted_screen.dart';
@@ -38,6 +39,19 @@ funcSignUp(email, pass, Map<String, dynamic> userJson) async {
   } catch (e) {
     print(e);
     Get.snackbar("Alert !", e.toString());
+  }
+}
+
+///searching
+Future getSearch(txt) async {
+  List<Search> data = [];
+  var isfound = await FirebaseFirestore.instance
+      .collection("channel")
+      .startAt([txt]).get();
+  if (isfound.docs.length > 0) {
+     isfound.docs.forEach((element) { 
+       data.add(Search.fromMap(element.data()) ) ;
+     });
   }
 }
 

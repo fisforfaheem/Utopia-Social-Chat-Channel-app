@@ -4,13 +4,31 @@ import 'package:flutter_application_utopia/const/common_widgets.dart';
 import 'package:flutter_application_utopia/const/navBar.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({Key? key}) : super(key: key);
+  final searchText;
+  const SearchScreen({Key? key, this.searchText}) : super(key: key);
 
   @override
   _SearchScreenState createState() => _SearchScreenState();
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  final searchController = TextEditingController();
+  List data = [];
+  atStart() async {
+    if (widget.searchText != null) {
+      searchController.text = widget.searchText;
+
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    atStart();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +46,8 @@ class _SearchScreenState extends State<SearchScreen> {
         child: SafeArea(
           child: Column(
             children: [
-              getSearchtextField("What Would You Like To Search ? ", ""),
+              getCustomeTextField(
+                  "What Would You Like To Search ? ", "", searchController),
               Expanded(
                 child: Padding(
                   padding:
