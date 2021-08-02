@@ -170,8 +170,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
 
 atStart() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.setString("diary", "yes");
   var userId = prefs.getString(
-    "email",
+    "uid",
   );
 }
