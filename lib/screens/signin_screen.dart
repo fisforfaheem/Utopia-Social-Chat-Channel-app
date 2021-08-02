@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, unnecessary_null_comparison
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_utopia/actions/actions.dart';
@@ -167,6 +167,7 @@ class _SignInState extends State<SignInPage> {
                               SharedPreferences pref =
                                   await SharedPreferences.getInstance();
                               pref.setString("email", user.email.toString());
+                              pref.setString("pic", user.photoURL.toString());
 
                               Get.snackbar(
                                   'Found', ' user found ${user.email}');

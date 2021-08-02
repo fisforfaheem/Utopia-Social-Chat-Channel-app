@@ -7,6 +7,7 @@ import 'package:flutter_application_utopia/const/commonColor.dart';
 import 'package:flutter_application_utopia/const/common_widgets.dart';
 import 'package:flutter_application_utopia/screens/channel_page.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UpdateProfilePage extends StatefulWidget {
   UpdateProfilePage({
@@ -23,6 +24,12 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _phonenumberController = TextEditingController();
   // TextEditingController _passwordController = TextEditingController();
+
+  getCurrentUserData() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString("email", user.email.toString());
+    pref.setString("pic", user.photoURL.toString());
+  }
 
   @override
   Widget build(BuildContext context) {
