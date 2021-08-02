@@ -1,8 +1,11 @@
 // ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors, deprecated_member_use, unused_import
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_utopia/actions/actions.dart';
 import 'package:flutter_application_utopia/const/commonColor.dart';
 import 'package:flutter_application_utopia/const/common_widgets.dart';
+import 'package:flutter_application_utopia/screens/channel_page.dart';
 import 'package:get/get.dart';
 
 class UpdateProfilePage extends StatefulWidget {
@@ -15,6 +18,12 @@ class UpdateProfilePage extends StatefulWidget {
 }
 
 class _UpdateProfilePageState extends State<UpdateProfilePage> {
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _phonenumberController = TextEditingController();
+  // TextEditingController _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,55 +87,23 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        getCustomeTextField(
-                            "UserName", "Please Enter UserName !"),
-                        getCustomeTextField("Email", "Please Enter Email !"),
-                        getCustomeTextField(
-                            "Phone Number", "Please Enter Phone Number !"),
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
-                          child: TextFormField(
-                            obscureText: false,
-                            decoration: InputDecoration(
-                              hintText: 'Password',
-                              fillColor: Colors.white,
-                              filled: true,
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.white,
-                                  width: 1,
-                                ),
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(8),
-                                  bottomRight: Radius.circular(8),
-                                  topLeft: Radius.circular(8),
-                                  topRight: Radius.circular(8),
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.white,
-                                  width: 1,
-                                ),
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(8),
-                                  bottomRight: Radius.circular(8),
-                                  topLeft: Radius.circular(8),
-                                  topRight: Radius.circular(8),
-                                ),
-                              ),
-
-                              //fillcolor: Colors..grayBG,
-                            ),
-                            keyboardType: TextInputType.visiblePassword,
-                            validator: (val) {
-                              if (val!.isEmpty) {
-                                return 'Please fill in a Password';
-                              }
-
-                              return null;
-                            },
-                          ),
+                        getCustomeTextFieldwithController("Name",
+                            "Please Enter Your Name !", _nameController),
+                        getCustomeTextFieldwithController("UserName",
+                            "Please Enter UserName !", _usernameController),
+                        getCustomeTextFieldwithController(
+                            "Email", "Please Enter Email !", _emailController),
+                        getCustomeTextFieldwithController(
+                            "Phone Number",
+                            "Please Enter Phone Number !",
+                            _phonenumberController),
+                        //enable this is user really wants this
+                        // getCustomeTextFieldwithController(
+                        //     "Phone Number",
+                        //     "Please Enter Your  Password !",
+                        //     _passwordController),
+                        SizedBox(
+                          height: 30,
                         ),
                         Container(
                           margin: EdgeInsets.symmetric(horizontal: 20),
@@ -146,8 +123,32 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                                   fontSize: 25,
                                   fontWeight: FontWeight.normal),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              //Update User Pofile
+                            },
                           ),
+                        ),
+                        FutureBuilder(
+                          future: FirebaseFirestore.instance
+                              .collection("profileimages")
+                              .get(),
+                          builder: (ctx, AsyncSnapshot snap) {
+                            if (snap.connectionState == ConnectionState.waiting)
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            QuerySnapshot data = snap.data;
+                            print(data.docs.length);
+                            if (snap.hasData)
+                              return Container(
+                                child: Expanded(
+                                  child: Center(),
+                                  // child: listCard(data.docs[index].data()),
+                                ),
+                              );
+                            else
+                              return Center();
+                          },
                         ),
                         SizedBox(
                           height: 19,
@@ -163,4 +164,24 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
       ),
     );
   }
+}
+
+listCard(mapData) {
+  return FutureBuilder(
+      future: getImageUrl("profileimages/" + mapData['pic']),
+      builder: (context, snapshot) {
+        print("......... " + snapshot.data.toString());
+
+        return Container(
+          color: grey.withOpacity(0.27),
+          padding: EdgeInsets.symmetric(vertical: 7),
+          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 7),
+          child: CircleAvatar(
+            radius: 22,
+            backgroundImage: NetworkImage(
+              snapshot.data.toString(),
+            ),
+          ),
+        );
+      });
 }
