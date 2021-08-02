@@ -1,10 +1,12 @@
-// ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors, deprecated_member_use, unused_import
+// ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors, deprecated_member_use, unused_import, unnecessary_statements
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_utopia/actions/actions.dart';
 import 'package:flutter_application_utopia/const/commonColor.dart';
 import 'package:flutter_application_utopia/const/common_widgets.dart';
+import 'package:flutter_application_utopia/model/user.dart';
 import 'package:flutter_application_utopia/screens/channel_page.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,11 +27,11 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
   TextEditingController _phonenumberController = TextEditingController();
   // TextEditingController _passwordController = TextEditingController();
 
-  // getCurrentUserData() async {
-  //   SharedPreferences pref = await SharedPreferences.getInstance();
-  //   pref.setString("email",user.email.toString());
-  //   pref.setString("pic", user.photoURL.toString());
-  // }
+  @override
+  void initState() {
+    super.initState();
+    atStart();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,8 +107,9 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                             "Please Enter Phone Number !",
                             _phonenumberController),
                         //enable this is user really wants this
+
                         // getCustomeTextFieldwithController(
-                        //     "Phone Number",
+                        //     "password",
                         //     "Please Enter Your  Password !",
                         //     _passwordController),
                         SizedBox(
@@ -130,12 +133,12 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                                   fontSize: 25,
                                   fontWeight: FontWeight.normal),
                             ),
-                            onPressed: () {
+                            onPressed: () async {
                               var collection = FirebaseFirestore.instance
                                   .collection('users');
                               collection
-                                  .doc(
-                                      'qZ4W6khw1fMQV18QXGH5') //ask faizan to make it dynamic(fetch Docid)
+                                  .doc('qZ4W6khw1fMQV18QXGH5')
+                                  //ask faizan to make it dynamic(fetch Docid)
                                   .update({
                                     'name': _nameController.text,
                                     'username': _usernameController.text,
@@ -163,4 +166,12 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
       ),
     );
   }
+}
+
+atStart() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setString("diary", "yes");
+  var userId = prefs.getString(
+    "email",
+  );
 }
