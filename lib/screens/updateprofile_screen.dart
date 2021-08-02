@@ -132,6 +132,22 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                             ),
                             onPressed: () {
                               //Update User Pofile
+
+                              var collection = FirebaseFirestore.instance
+                                  .collection('users');
+                              collection
+                                  .doc(
+                                      'qZ4W6khw1fMQV18QXGH5') // <-- Doc ID where data should be updated.
+                                  .update({
+                                    'name': _nameController.text,
+                                    'username': _usernameController.text,
+                                    'email': _emailController.text,
+                                    'phonenumber': _phonenumberController.text,
+                                    //'password': '$_usernameController',
+                                  }) // <-- Updated data
+                                  .then((_) => print('Updated'))
+                                  .catchError((error) =>
+                                      print('Update failed: $error'));
                             },
                           ),
                         ),

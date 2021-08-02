@@ -196,29 +196,6 @@ class _SignUpPageState extends State<SignUpPage> {
                       ],
                     ),
 
-                    // Column(
-                    //   mainAxisAlignment: MainAxisAlignment.start,
-                    //   crossAxisAlignment: CrossAxisAlignment.start,
-                    //   children: [
-                    //     Padding(
-                    //       padding: const EdgeInsets.all(5.0),
-                    //       child: Text(
-                    //         "Password",
-                    //         style: TextStyle(fontWeight: FontWeight.bold),
-                    //       ),
-                    //     ),
-                    //     PasswordField(
-                    //       controller: _passwordController,
-                    //       border: OutlineInputBorder(),
-
-                    //       hintText: "Password",
-                    //       errorMessage: 'required atleast 6  ',
-                    //       pattern: r'^(?=.*[1-9 ])(?=.*\d)[1-9\d]{6,}$',
-                    //       // pattern: r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$',
-                    //     ),
-                    //   ],
-                    // ),
-
                     SizedBox(
                       height: 19,
                     ),
