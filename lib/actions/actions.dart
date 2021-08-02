@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_utopia/model/server.dart';
 import 'package:flutter_application_utopia/model/user.dart';
 import 'package:flutter_application_utopia/screens/getstarted_screen.dart';
 import 'package:flutter_application_utopia/screens/imageuploadtest.dart';
@@ -40,10 +41,81 @@ funcSignUp(email, pass, Map<String, dynamic> userJson) async {
   }
 }
 
+//// create Channel
+Future createnewChannel(name, server) async {
+  try {
+    var isfound = await FirebaseFirestore.instance
+        .collection("channel")
+        .where("name", isEqualTo: name)
+        .get();
+    if (isfound.docs.length > 0) {
+      Get.snackbar(
+        "Alert !",
+        "Already Exist ...",
+        backgroundColor: Colors.white,
+        colorText: Colors.black,
+      );
+      return null;
+    }
+    await FirebaseFirestore.instance.collection("channel").add({
+      "name": name.toString(),
+      "server": server.toString(),
+      "noOfMember": 0
+    });
+
+    var jsonMap = await FirebaseFirestore.instance
+        .collection("server")
+        .where('name', isEqualTo: server.toString())
+        .get();
+    // .where("email", isEqualTo: name!)
+    // .get();
+
+    print(jsonMap.docs[0].data());
+    var docId = jsonMap.docs.first.id;
+
+    Server u = Server.fromMap(jsonMap.docs[0].data());
+    print(docId + " .... Get");
+
+    u.noOfChannel += 1;
+
+    var jsonUpdated = u.toMap();
+
+    FirebaseFirestore.instance
+        .collection("server")
+        .doc(docId)
+        .update(jsonUpdated);
+
+    Get.snackbar(
+      "Alert !",
+      "Created SuccessFully ...",
+      backgroundColor: Colors.white,
+      colorText: Colors.black,
+    );
+    return "ok";
+  } on FirebaseException catch (e) {
+    Get.snackbar("Error", "$e");
+    print(e);
+    return null;
+  }
+}
+
 //// create server
 Future createnewServer(File file, name) async {
   if (file == null) return;
 
+  var isfound = await FirebaseFirestore.instance
+      .collection("server")
+      .where("name", isEqualTo: name)
+      .get();
+  if (isfound.docs.length > 0) {
+    Get.snackbar(
+      "Alert !",
+      "Already Exist ...",
+      backgroundColor: Colors.white,
+      colorText: Colors.black,
+    );
+    return null;
+  }
   SharedPreferences pref = await SharedPreferences.getInstance();
   var email = pref.getString("email");
 
@@ -58,7 +130,15 @@ Future createnewServer(File file, name) async {
       "name": name.toString(),
       "pic": fileName.toString(),
       "createdBy": email,
+      "noOfChannel": 0
     });
+
+    Get.snackbar(
+      "Alert !",
+      "Created SuccessFully ...",
+      backgroundColor: Colors.white,
+      colorText: Colors.black,
+    );
 
     return await ref.putFile(file);
   } on FirebaseException catch (e) {

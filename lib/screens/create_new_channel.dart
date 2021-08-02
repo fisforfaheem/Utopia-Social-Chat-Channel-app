@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_utopia/actions/actions.dart';
 import 'package:flutter_application_utopia/const/navBar.dart';
 import 'package:flutter_application_utopia/const/commonColor.dart';
 import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
@@ -8,13 +9,16 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class CreateNewChannel extends StatefulWidget {
-  const CreateNewChannel({Key? key}) : super(key: key);
+  final name;
+  const CreateNewChannel({Key? key, this.name}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<CreateNewChannel> {
+  final channelController = TextEditingController();
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,6 +50,7 @@ class _HomeScreenState extends State<CreateNewChannel> {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: TextFormField(
+                  controller: channelController,
                   style: TextStyle(),
                   decoration: InputDecoration(
                     fillColor: Colors.white,
@@ -57,6 +62,8 @@ class _HomeScreenState extends State<CreateNewChannel> {
               ),
 
               //btn
+              isLoading ? CircularProgressIndicator() : Center(),
+
               Padding(
                 padding: EdgeInsets.fromLTRB(0.0, 32.0, 0.0, 0.0),
                 child: Container(
@@ -75,7 +82,15 @@ class _HomeScreenState extends State<CreateNewChannel> {
                       style: TextStyle(
                           color: Colors.black, fontWeight: FontWeight.normal),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
+                      setState(() {
+                        isLoading = true;
+                      });
+
+                      createnewChannel(channelController.text, widget.name);
+                      setState(() {
+                        isLoading = false;
+                      });
                       //Get.offAll(HomeScreen());
                     },
                   ),

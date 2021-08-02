@@ -81,12 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: ListView.builder(
                       itemCount: data.docs.length,
                       itemBuilder: (ctx, index) {
-                        return InkWell(
-                          onTap: () {
-                            Get.to(ChannelPage(ind: index));
-                          },
-                          child: listCard(index, data.docs[index].data()),
-                        );
+                        return listCard(index, data.docs[index].data());
                       },
                     ),
                   ),
@@ -113,6 +108,9 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: EdgeInsets.symmetric(vertical: 7),
             margin: EdgeInsets.symmetric(horizontal: 20, vertical: 7),
             child: ListTile(
+              onTap: () {
+                Get.to(ChannelPage(ind: mapData['name']));
+              },
               leading: CircleAvatar(
                 radius: 22,
                 backgroundImage: NetworkImage(
@@ -128,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "${index + 1}",
+                      "${mapData['noOfChannel']}",
                       style: TextStyle(color: Colors.white),
                     ),
                   )),

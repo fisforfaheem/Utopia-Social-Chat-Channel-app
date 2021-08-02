@@ -1,5 +1,6 @@
 // ignore_for_file: unused_import
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_utopia/const/navBar.dart';
 import 'package:flutter_application_utopia/const/commonColor.dart';
@@ -28,7 +29,7 @@ class _HomeScreenState extends State<ChannelPage> {
         iconTheme: IconThemeData(color: Colors.white),
         backgroundColor: Colors.black,
         title: Text(
-          "Channels",
+          "Channels of ${widget.ind}",
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
@@ -46,7 +47,7 @@ class _HomeScreenState extends State<ChannelPage> {
                     borderRadius: BorderRadius.circular(00.0))),
               ),
               onPressed: () {
-                Get.to(CreateNewChannel());
+                Get.to(CreateNewChannel(name: widget.ind));
               },
               child: Row(
                 children: [
@@ -59,18 +60,38 @@ class _HomeScreenState extends State<ChannelPage> {
           SizedBox(
             height: 20,
           ),
-          Expanded(
-              child: ListView.builder(
-                  itemCount: 3,
-                  itemBuilder: (ctx, index) {
-                    return listCard(index);
-                  })),
+          FutureBuilder(
+            future: FirebaseFirestore.instance.collection("channel").get(),
+            builder: (ctx, AsyncSnapshot snap) {
+              if (snap.connectionState == ConnectionState.waiting)
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              QuerySnapshot data = snap.data;
+              print(data.docs.length);
+              if (snap.hasData)
+                return Container(
+                  child: Expanded(
+                    child: ListView.builder(
+                      itemCount: data.docs.length,
+                      itemBuilder: (ctx, index) {
+                        return listCard(index, data.docs[index].data());
+                      },
+                    ),
+                  ),
+                );
+              else
+                return Center(
+                  child: Text("No Server Found ..."),
+                );
+            },
+          ),
         ],
       ),
     );
   }
 
-  listCard(index) {
+  listCard(index, jsonMap) {
     return Container(
       color: grey.withOpacity(0.27),
       padding: EdgeInsets.symmetric(vertical: 7),
@@ -83,11 +104,11 @@ class _HomeScreenState extends State<ChannelPage> {
           backgroundImage: AssetImage("assets/images/splash.png"),
         ),
         title: Text(
-          "Channel ${index + 1}",
+          "${jsonMap['name']}",
           style: TextStyle(color: Colors.black),
         ),
         subtitle: Text(
-          "Member ${index + 1}",
+          "Member ${jsonMap['noOfMember']}",
           style: TextStyle(color: Colors.black),
         ),
         trailing: IconButton(
