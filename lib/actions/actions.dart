@@ -1,5 +1,6 @@
 // ignore_for_file: unused_element, unused_import
 
+import 'dart:convert';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -71,17 +72,22 @@ Future<List<Search>> getSearch(txt) async {
   //     .collection("users")
   //     .where("username", isGreaterThanOrEqualTo: txt)
   //     .get();
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  String email = pref.getString("email") ?? "";
   final QuerySnapshot querySnapshot =
       await FirebaseFirestore.instance.collection('users').get();
   final List<DocumentSnapshot> documents = querySnapshot.docs;
   final List<DocumentSnapshot> founded = documents
-      .where((element) => element.data.toString().contains('txt'))
+      .where((element) => element.data.toString().contains('$txt'))
       .toList();
-  if (founded.length > 0) {
-    founded.forEach((element) {
-      data.add(Search(name: element['name'], type: "user $element"));
-    });
-  }
+
+  documents.forEach((element) {
+    var d = jsonEncode(element.data()!);
+    print(d);
+    if (d != email)
+      data.add(Search(name: element['username'], type: "user $element"));
+  });
+
   //  => ;
   // if (isfound.docs.length > 0) {
   //   isfound.docs.forEach((element) {

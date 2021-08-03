@@ -75,7 +75,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 subtitle:
                                     Text(" ${data[index].type.split(' ')[0]}"),
                                 trailing:
-                                    data[index].type.split(' ')[0] == "channel"
+                                    data[index].type.split(' ')[0] == "user"
                                         ? IconButton(
                                             onPressed: () {},
                                             icon: Icon(Icons.person_add_alt),
