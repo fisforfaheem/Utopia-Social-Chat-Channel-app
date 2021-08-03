@@ -20,7 +20,7 @@ class _SignInState extends State<SignInPage> {
   FirebaseAuth auth = FirebaseAuth.instance;
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-
+  bool isLoading = false;
   bool passToggale = true;
   @override
   Widget build(BuildContext context) {
@@ -136,59 +136,71 @@ class _SignInState extends State<SignInPage> {
                       height: 19,
                     ),
                     // ignore: unnecessary_new
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 20),
-                      padding: EdgeInsets.symmetric(vertical: 7),
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black, width: 1.5),
-                        color: ptaNI,
-                        borderRadius: BorderRadius.circular(30),
-                        // shape: StadiumBorder(),
-                      ),
-                      child: TextButton(
-                        child: Text(
-                          'Sign In',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.normal),
-                        ),
-                        onPressed: () async {
-                          try {
-                            print("enter");
-                            User user = (await FirebaseAuth.instance
-                                    .signInWithEmailAndPassword(
-                              email: _emailController.text,
-                              password: _passwordController.text,
-                            ))
-                                .user!;
-                            print(user);
-                            if (user != null) {
-                              SharedPreferences pref =
-                                  await SharedPreferences.getInstance();
-                              pref.setString("email", user.email.toString());
-                              pref.setString("pic", user.photoURL.toString());
+                    isLoading
+                        ? CircularProgressIndicator()
+                        : Container(
+                            margin: EdgeInsets.symmetric(horizontal: 20),
+                            padding: EdgeInsets.symmetric(vertical: 7),
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              border:
+                                  Border.all(color: Colors.black, width: 1.5),
+                              color: ptaNI,
+                              borderRadius: BorderRadius.circular(30),
+                              // shape: StadiumBorder(),
+                            ),
+                            child: TextButton(
+                              child: Text(
+                                'Sign In',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                              onPressed: () async {
+                                setState(() {
+                                  isLoading = true;
+                                });
+                                try {
+                                  print("enter");
+                                  User user = (await FirebaseAuth.instance
+                                          .signInWithEmailAndPassword(
+                                    email: _emailController.text,
+                                    password: _passwordController.text,
+                                  ))
+                                      .user!;
+                                  print(user);
+                                  if (user != null) {
+                                    SharedPreferences pref =
+                                        await SharedPreferences.getInstance();
+                                    pref.setString(
+                                        "email", user.email.toString());
+                                    pref.setString(
+                                        "pic", user.photoURL.toString());
 
-                              Get.snackbar(
-                                  'Found', ' user found ${user.email}');
-                              print('User =>' + '${user.uid}');
+                                    Get.snackbar(
+                                        'Found', ' user found ${user.email}');
+                                    print('User =>' + '${user.uid}');
 
-                              var isPicUploaded = pref.getBool("isPicUploaded");
-                              if (isPicUploaded == true)
-                                Get.offAll(HomeScreen());
-                              else
-                                Get.to(Addprofile());
-                            }
-                          } catch (e) {
-                            print(e);
-                            Get.snackbar(
-                                'Error', '  Incorrect Email or Password !');
-                            _emailController.text = "";
-                            _passwordController.text = "";
-                          }
-                        },
-                      ),
-                    ),
+                                    var isPicUploaded =
+                                        pref.getBool("isPicUploaded");
+                                    if (isPicUploaded == true)
+                                      Get.offAll(HomeScreen());
+                                    else
+                                      Get.to(Addprofile());
+                                  }
+                                } catch (e) {
+                                  print(e);
+                                  Get.snackbar('Error',
+                                      '  Incorrect Email or Password !');
+                                  _emailController.text = "";
+                                  _passwordController.text = "";
+                                }
+                                setState(() {
+                                  isLoading = false;
+                                });
+                              },
+                            ),
+                          ),
                     SizedBox(
                       height: 19,
                     ),

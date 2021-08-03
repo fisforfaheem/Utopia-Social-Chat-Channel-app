@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_utopia/actions/actions.dart';
 import 'package:flutter_application_utopia/const/commonColor.dart';
 import 'package:flutter_application_utopia/const/common_widgets.dart';
 import 'package:flutter_application_utopia/const/navBar.dart';
+import 'package:flutter_application_utopia/model/friends.dart';
 
 class SearchScreen extends StatefulWidget {
   final searchText;
@@ -13,10 +15,11 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final searchController = TextEditingController();
-  List data = [];
+  List<Search> data = [];
   atStart() async {
     if (widget.searchText != null) {
       searchController.text = widget.searchText;
+      data = await getSearch(searchController.text);
 
       setState(() {});
     }
@@ -46,8 +49,8 @@ class _SearchScreenState extends State<SearchScreen> {
         child: SafeArea(
           child: Column(
             children: [
-              getCustomeTextField(
-                  "What Would You Like To Search ? ", "", searchController),
+              getSearchtextField("What Would You Like To Search ? ", "",
+                  searchController, onChanged),
               Expanded(
                 child: Padding(
                   padding:
@@ -65,10 +68,22 @@ class _SearchScreenState extends State<SearchScreen> {
                       ),
                       Expanded(
                         child: ListView.builder(
-                            itemCount: 3,
+                            itemCount: data.length,
                             itemBuilder: (ctx, index) {
-                              return Container(
-                                child: Text("Suggestion ${index + 1}"),
+                              return ListTile(
+                                title: Text(" ${data[index].name}"),
+                                subtitle:
+                                    Text(" ${data[index].type.split(' ')[0]}"),
+                                trailing:
+                                    data[index].type.split(' ')[0] == "channel"
+                                        ? IconButton(
+                                            onPressed: () {},
+                                            icon: Icon(Icons.person_add_alt),
+                                          )
+                                        : IconButton(
+                                            onPressed: () {},
+                                            icon: Icon(Icons.done_all),
+                                          ),
                               );
                             }),
                       ),
@@ -81,5 +96,10 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       ),
     );
+  }
+
+  onChanged(data1) {
+    data = data1;
+    setState(() {});
   }
 }

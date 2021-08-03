@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_utopia/const/commonColor.dart';
 import 'package:flutter_application_utopia/const/navBar.dart';
+import 'package:flutter_application_utopia/screens/getstarted_screen.dart';
 import 'package:flutter_application_utopia/screens/privacyscreen.dart';
 import 'package:flutter_application_utopia/screens/updateprofile_screen.dart';
 import 'package:get/get.dart';
@@ -36,7 +37,7 @@ class _SettingPageState extends State<SettingPage> {
         actions: [
           IconButton(
             onPressed: () async {
-              Navigator.pop(context);
+              Get.offAll(GetStartedPage());
             },
             icon: Icon(
               Icons.login_rounded,

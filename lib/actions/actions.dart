@@ -43,16 +43,54 @@ funcSignUp(email, pass, Map<String, dynamic> userJson) async {
 }
 
 ///searching
-Future getSearch(txt) async {
+Future<List<Search>> getSearch(txt) async {
   List<Search> data = [];
   var isfound = await FirebaseFirestore.instance
       .collection("channel")
-      .startAt([txt]).get();
+      .where("name", isGreaterThanOrEqualTo: txt)
+      .get();
+  //print(isfound);
   if (isfound.docs.length > 0) {
-     isfound.docs.forEach((element) { 
-       data.add(Search.fromMap(element.data()) ) ;
-     });
+    isfound.docs.forEach((element) {
+      data.add(Search(
+          name: element.data()['name'], type: "channel  ${element.data()}"));
+    });
   }
+  isfound = await FirebaseFirestore.instance
+      .collection("server")
+      .where("name", isGreaterThanOrEqualTo: txt)
+      .get();
+  if (isfound.docs.length > 0) {
+    isfound.docs.forEach((element) {
+      data.add(Search(
+          name: element.data()['name'], type: "server ${element.data()}"));
+    });
+  }
+
+  // isfound = await FirebaseFirestore.instance
+  //     .collection("users")
+  //     .where("username", isGreaterThanOrEqualTo: txt)
+  //     .get();
+  final QuerySnapshot querySnapshot =
+      await FirebaseFirestore.instance.collection('users').get();
+  final List<DocumentSnapshot> documents = querySnapshot.docs;
+  final List<DocumentSnapshot> founded = documents
+      .where((element) => element.data.toString().contains('txt'))
+      .toList();
+  if (founded.length > 0) {
+    founded.forEach((element) {
+      data.add(Search(name: element['name'], type: "user $element"));
+    });
+  }
+  //  => ;
+  // if (isfound.docs.length > 0) {
+  //   isfound.docs.forEach((element) {
+  //     data.add(
+  //         Search(name: element.data()['name'], type: "user ${element.data()}"));
+  //   });
+  // }
+  print(data.length);
+  return data;
 }
 
 //// create Channel

@@ -4,23 +4,23 @@ class FriendsList {}
 
 class Search {
   String name;
-  String pic;
+  String type;
   Search({
     required this.name,
-    required this.pic,
+    required this.type,
   });
 
   Map<String, dynamic> toMap() {
     return {
       'name': name,
-      'pic': pic,
+      'type': type,
     };
   }
 
   factory Search.fromMap(Map<String, dynamic> map) {
     return Search(
       name: map['name'],
-      pic: map['pic'],
+      type: map['type'],
     );
   }
 

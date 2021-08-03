@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_utopia/actions/actions.dart';
 
 getCustomeTextField(hint, error, controller) {
   return Padding(
@@ -47,10 +48,11 @@ getCustomeTextField(hint, error, controller) {
   );
 }
 
-getSearchtextField(hint, error) {
+getSearchtextField(hint, error, controller, Function onChanged) {
   return Padding(
     padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
     child: TextFormField(
+      controller: controller,
       obscureText: false,
       decoration: InputDecoration(
         hintText: hint,
@@ -82,6 +84,10 @@ getSearchtextField(hint, error) {
         ),
       ),
       keyboardType: TextInputType.name,
+      onChanged: (txt) async {
+        var d = await getSearch(txt);
+        onChanged(d);
+      },
       validator: (val) {
         if (val!.isEmpty) {
           return error;
