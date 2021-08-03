@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_utopia/actions/actions.dart';
 import 'package:flutter_application_utopia/const/commonColor.dart';
@@ -169,8 +170,12 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
 }
 
 atStart() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  var userId = prefs.getString(
-    "uid",
-  );
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // var userId = prefs.getString(
+  //   "uid",
+  // );
+  final ref = FirebaseStorage.instance.ref().child('profileimages');
+// no need of the file extension, the name will do fine.
+  var url = await ref.getDownloadURL();
+  print(url);
 }
