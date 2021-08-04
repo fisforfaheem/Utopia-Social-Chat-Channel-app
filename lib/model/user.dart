@@ -8,6 +8,7 @@ class Users {
   String password;
   bool isAllowed;
   String pic;
+  String phonenumber;
 
   Users({
     required this.email,
@@ -17,6 +18,7 @@ class Users {
     required this.password,
     required this.isAllowed,
     required this.pic,
+    required this.phonenumber,
   });
 
   Map<String, dynamic> toMap() {
@@ -27,7 +29,8 @@ class Users {
       'gender': gender,
       'password': password,
       'isAllowed': isAllowed,
-      'pic': pic
+      'pic': pic,
+      "phonenumber": phonenumber,
     };
   }
 
@@ -40,6 +43,7 @@ class Users {
       password: map['password'],
       isAllowed: map['isAllowed'],
       pic: map['pic'],
+      phonenumber: map['phonenumber'],
     );
   }
 

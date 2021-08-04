@@ -1,13 +1,16 @@
 // ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_utopia/actions/actions.dart';
 import 'package:flutter_application_utopia/const/commonColor.dart';
 import 'package:flutter_application_utopia/const/navBar.dart';
 import 'package:flutter_application_utopia/screens/getstarted_screen.dart';
 import 'package:flutter_application_utopia/screens/privacyscreen.dart';
 import 'package:flutter_application_utopia/screens/updateprofile_screen.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingPage extends StatefulWidget {
   SettingPage({
@@ -19,6 +22,28 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  String url = "", username = '', email = '';
+  bool isLoading = false;
+  atStart() async {
+    setState(() {
+      isLoading = true;
+    });
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    email = pref.getString("email") ?? "";
+
+    username = pref.getString("username") ?? "";
+    var ref = await getImageUrl("profileimages/" + email);
+    url = ref;
+    isLoading = false;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    atStart();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -37,6 +62,10 @@ class _SettingPageState extends State<SettingPage> {
         actions: [
           IconButton(
             onPressed: () async {
+              SharedPreferences pref = await SharedPreferences.getInstance();
+              pref.remove("email");
+              pref.clear();
+              await FirebaseAuth.instance.signOut();
               Get.offAll(GetStartedPage());
             },
             icon: Icon(
@@ -54,45 +83,46 @@ class _SettingPageState extends State<SettingPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Container(
-                width: size.width,
-                height: 230,
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                ),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 15,
-                    ),
-                    CircleAvatar(
-                      backgroundColor: Colors.black,
-                      radius: 88,
-                      child: Center(
-                        child: CircleAvatar(
-                          radius: 86,
-                          backgroundImage:
-                              AssetImage("assets/images/splash.png"),
-                          backgroundColor: Colors.grey,
-                        ),
+              isLoading
+                  ? CircularProgressIndicator()
+                  : Container(
+                      width: size.width,
+                      height: 230,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: BoxDecoration(
+                        color: Colors.grey,
+                      ),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 15,
+                          ),
+                          CircleAvatar(
+                            backgroundColor: Colors.black,
+                            radius: 88,
+                            child: Center(
+                              child: CircleAvatar(
+                                radius: 86,
+                                backgroundImage: NetworkImage(url),
+                                backgroundColor: Colors.grey,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            '$username'.toUpperCase(),
+                            style: TextStyle(
+                              fontFamily: 'Lexend Deca',
+                              color: Colors.black,
+                              fontSize: 23,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      'User Name',
-                      style: TextStyle(
-                        fontFamily: 'Lexend Deca',
-                        color: Colors.black,
-                        fontSize: 23,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
               Container(
                 height: size.height - 230,
                 padding: EdgeInsets.symmetric(horizontal: 20),
@@ -117,7 +147,10 @@ class _SettingPageState extends State<SettingPage> {
                         ),
                         InkWell(
                           onTap: () {
-                            Get.to(UpdateProfilePage());
+                            Get.to(UpdateProfilePage(
+                              email: email,
+                              url: url,
+                            ));
                           },
                           child: Row(
                             children: [

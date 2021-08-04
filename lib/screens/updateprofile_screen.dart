@@ -13,9 +13,8 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UpdateProfilePage extends StatefulWidget {
-  UpdateProfilePage({
-    Key? key,
-  }) : super(key: key);
+  final url, email;
+  UpdateProfilePage({Key? key, this.email, this.url}) : super(key: key);
 
   @override
   _UpdateProfilePageState createState() => _UpdateProfilePageState();
@@ -26,13 +25,19 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _phonenumberController = TextEditingController();
-  // TextEditingController _passwordController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  String docID = '';
+  String dob = "";
+  String gender = "";
+  bool isAllowed = false;
 
   @override
   void initState() {
     super.initState();
     atStart();
   }
+
+  bool passToggale = true;
 
   @override
   Widget build(BuildContext context) {
@@ -79,8 +84,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                         child: Center(
                           child: CircleAvatar(
                             radius: 62,
-                            backgroundImage:
-                                AssetImage("assets/images/splash.png"),
+                            backgroundImage: NetworkImage(widget.url),
                             backgroundColor: Colors.grey,
                           ),
                         ),
@@ -97,16 +101,57 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        getCustomeTextFieldwithController("Name",
-                            "Please Enter Your Name !", _nameController),
-                        getCustomeTextFieldwithController("UserName",
-                            "Please Enter UserName !", _usernameController),
                         getCustomeTextFieldwithController(
-                            "Email", "Please Enter Email !", _emailController),
+                            "UserName",
+                            "Please Enter UserName !",
+                            _usernameController,
+                            false),
+                        getCustomeTextFieldwithController("Email",
+                            "Please Enter Email !", _emailController, true),
                         getCustomeTextFieldwithController(
                             "Phone Number",
                             "Please Enter Phone Number !",
-                            _phonenumberController),
+                            _phonenumberController,
+                            false),
+
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+                          child: TextFormField(
+                            controller: _passwordController,
+                            autofocus: true,
+                            keyboardType: TextInputType.number,
+                            autocorrect: false,
+                            obscureText: passToggale,
+                            textCapitalization: TextCapitalization.words,
+                            decoration: InputDecoration(
+                              hintText: "password",
+                              fillColor: Colors.white,
+                              filled: true,
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    passToggale = !passToggale;
+                                  });
+                                },
+                                icon: Icon(
+                                  Icons.remove_red_eye_rounded,
+                                  color:
+                                      passToggale ? Colors.grey : Colors.blue,
+                                ),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(8),
+                                  bottomRight: Radius.circular(8),
+                                  topLeft: Radius.circular(8),
+                                  topRight: Radius.circular(8),
+                                ),
+                              ),
+                            ),
+                            style: TextStyle(color: Colors.black87),
+                          ),
+                        ),
+
                         //enable this is user really wants this
 
                         // getCustomeTextFieldwithController(
@@ -135,18 +180,31 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                                   fontWeight: FontWeight.normal),
                             ),
                             onPressed: () async {
+                              SharedPreferences pref =
+                                  await SharedPreferences.getInstance();
+                              var pic = pref.getString("pic");
+                              print(dob);
+                              var jsonData = Users(
+                                      email: _emailController.text,
+                                      username: _usernameController.text,
+                                      dob: DateTime.parse(dob),
+                                      gender: gender,
+                                      password: '',
+                                      isAllowed: isAllowed,
+                                      pic: pic!,
+                                      phonenumber: _phonenumberController.text)
+                                  .toMap();
+                              if (_passwordController.text.length > 0) {
+                                User user = FirebaseAuth.instance.currentUser!;
+                                user.updatePassword(_passwordController.text);
+                                print(user);
+                              }
                               var collection = FirebaseFirestore.instance
                                   .collection('users');
                               collection
-                                  .doc('qZ4W6khw1fMQV18QXGH5')
+                                  .doc(docID)
                                   //ask faizan to make it dynamic(fetch Docid)
-                                  .update({
-                                    'name': _nameController.text,
-                                    'username': _usernameController.text,
-                                    'email': _emailController.text,
-                                    'phonenumber': _phonenumberController.text,
-                                    //'password': '$_usernameController',
-                                  })
+                                  .update(jsonData)
                                   .then((_) => print('Updated'))
                                   .catchError((error) =>
                                       print('Update failed: $error'));
@@ -167,15 +225,21 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
       ),
     );
   }
-}
 
-atStart() async {
-  // SharedPreferences prefs = await SharedPreferences.getInstance();
-  // var userId = prefs.getString(
-  //   "uid",
-  // );
-  final ref = FirebaseStorage.instance.ref().child('profileimages');
-// no need of the file extension, the name will do fine.
-  var url = await ref.getDownloadURL();
-  print(url);
+  atStart() async {
+    var dataUser = await FirebaseFirestore.instance
+        .collection("users")
+        .where("email", isEqualTo: widget.email.toString())
+        .get();
+
+    isAllowed = dataUser.docs.first.data()['isAllowed'];
+    dob = dataUser.docs.first.data()['dob'];
+    _emailController.text = widget.email;
+    _usernameController.text = dataUser.docs.first.data()['username'];
+
+    _phonenumberController.text = dataUser.docs.first.data()['phonenumber'];
+    docID = dataUser.docs.first.id;
+    print(docID);
+    setState(() {});
+  }
 }

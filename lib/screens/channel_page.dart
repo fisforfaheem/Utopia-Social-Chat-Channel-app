@@ -61,7 +61,10 @@ class _HomeScreenState extends State<ChannelPage> {
             height: 20,
           ),
           FutureBuilder(
-            future: FirebaseFirestore.instance.collection("channel").get(),
+            future: FirebaseFirestore.instance
+                .collection("channel")
+                .where("server", isEqualTo: widget.ind)
+                .get(),
             builder: (ctx, AsyncSnapshot snap) {
               if (snap.connectionState == ConnectionState.waiting)
                 return Center(

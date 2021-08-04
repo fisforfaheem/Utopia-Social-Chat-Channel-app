@@ -322,6 +322,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             gender: selectedRole,
                             password: "",
                             isAllowed: true,
+                            phonenumber: "",
                           ).toMap();
 
                           funcSignUp(_emailController.text,

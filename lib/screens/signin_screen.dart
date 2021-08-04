@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use, unnecessary_null_comparison
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_utopia/actions/actions.dart';
 import 'package:flutter_application_utopia/const/commonColor.dart';
@@ -174,15 +175,28 @@ class _SignInState extends State<SignInPage> {
                                         await SharedPreferences.getInstance();
                                     pref.setString(
                                         "email", user.email.toString());
-                                    pref.setString(
-                                        "pic", user.photoURL.toString());
+                                    var dataUser = await FirebaseFirestore
+                                        .instance
+                                        .collection("users")
+                                        .where("email",
+                                            isEqualTo: user.email.toString())
+                                        .get();
+
+                                    pref.setString("pic",
+                                        dataUser.docs.first.data()['pic']);
+                                    pref.setString("username",
+                                        dataUser.docs.first.data()['username']);
 
                                     Get.snackbar(
                                         'Found', ' user found ${user.email}');
                                     print('User =>' + '${user.uid}');
 
-                                    var isPicUploaded =
-                                        pref.getBool("isPicUploaded");
+                                    var isPicUploaded = dataUser.docs.first
+                                            .data()['pic']
+                                            .toString()
+                                            .contains('.')
+                                        ? true
+                                        : false;
                                     if (isPicUploaded == true)
                                       Get.offAll(HomeScreen());
                                     else

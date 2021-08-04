@@ -99,12 +99,13 @@ getSearchtextField(hint, error, controller, Function onChanged) {
   );
 }
 
-getCustomeTextFieldwithController(hint, error, controller) {
+getCustomeTextFieldwithController(hint, error, controller, readOnly) {
   return Padding(
     padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
     child: TextFormField(
       controller: controller,
       obscureText: false,
+      readOnly: readOnly,
       decoration: InputDecoration(
         hintText: hint,
         fillColor: Colors.white,
