@@ -133,9 +133,11 @@ Future<List<Search>> getSearch(txt) async {
       var abc = null;
       if (alreadyFriends.docs.length > 0)
         try {
-          abc = alreadyFriends.docs
-              .firstWhere((fe) => fe.data()['toemail'] == jsonData['email']);
+          abc = alreadyFriends.docs.firstWhere((fe) =>
+              fe.data()['toemail'].toString().replaceAll(" ", "") ==
+              jsonData['email']);
         } catch (e) {}
+
       if (abc == null)
         data.add(Search(name: jsonData['username'], type: "user $jsonData"));
     }

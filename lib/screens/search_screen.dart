@@ -24,6 +24,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
       setState(() {});
     }
+    getSearch("");
   }
 
   @override
