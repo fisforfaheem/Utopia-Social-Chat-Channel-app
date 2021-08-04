@@ -30,8 +30,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
   var imageUrl = 'null';
   atStart() async {
     // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // var userId = prefs.getString(
-    //   "uid",
+    // pref.setString("email", User.email);
     // );
     final ref = FirebaseStorage.instance
         .ref()
@@ -184,18 +183,3 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
     );
   }
 }
-
-// atStart() async {
-//   // SharedPreferences prefs = await SharedPreferences.getInstance();
-//   // var userId = prefs.getString(
-//   //   "uid",
-//   // );
-//   final ref = FirebaseStorage.instance
-//       .ref()
-//       .child('/profileimages')
-//       .child('f@gmail.com');
-// // no need of the file extension, the name will do fine.
-//   var url = await ref.getDownloadURL();
-//   imageUrl = url;
-//   print(url);
-// }

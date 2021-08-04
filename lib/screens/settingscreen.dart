@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_utopia/const/commonColor.dart';
@@ -19,6 +20,27 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  var imageUrl = 'null';
+  atStart() async {
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // pref.setString("email", User.email);
+    // );
+    final ref = FirebaseStorage.instance
+        .ref()
+        .child('profileimages')
+        .child('f@gmail.com');
+// no need of the file extension, the name will do fine.
+    var url = await ref.getDownloadURL();
+    imageUrl = url;
+    print(url);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    atStart();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -72,15 +94,14 @@ class _SettingPageState extends State<SettingPage> {
                       child: Center(
                         child: CircleAvatar(
                           radius: 86,
-                          backgroundImage:
-                              AssetImage("assets/images/splash.png"),
+                          backgroundImage: NetworkImage('$imageUrl'),
                           backgroundColor: Colors.grey,
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
+                    // SizedBox(
+                    //   height: 10,
+                    // ),
                     Text(
                       'User Name',
                       style: TextStyle(
@@ -214,7 +235,7 @@ class _SettingPageState extends State<SettingPage> {
                                 width: 5,
                               ),
                               Text(
-                                ' 🚀  Boost',
+                                '🚀  Boost',
                                 style: TextStyle(
                                   fontFamily: 'Lexend Deca',
                                   color: Colors.black,
