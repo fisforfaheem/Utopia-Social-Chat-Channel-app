@@ -103,6 +103,7 @@ class _HomeScreenState extends State<ChannelPage> {
         onTap: () {
           Get.to(MessageScreen(
             channelName: jsonMap['name'],
+            servername: widget.ind,
           ));
         },
         leading: CircleAvatar(

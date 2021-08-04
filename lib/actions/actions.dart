@@ -157,6 +157,9 @@ Future<List<Search>> getSearch(txt) async {
 //// create Channel
 Future createnewChannel(name, server) async {
   try {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    var email = pref.getString("email");
+
     var isfound = await FirebaseFirestore.instance
         .collection("channel")
         .where("name", isEqualTo: name)
@@ -173,7 +176,12 @@ Future createnewChannel(name, server) async {
     await FirebaseFirestore.instance.collection("channel").add({
       "name": name.toString(),
       "server": server.toString(),
-      "noOfMember": 0
+      "noOfMember": 1
+    });
+    await FirebaseFirestore.instance.collection("member").add({
+      "server": "${server.toString()}",
+      "channel": name.toString(),
+      "member": "$email",
     });
 
     var jsonMap = await FirebaseFirestore.instance

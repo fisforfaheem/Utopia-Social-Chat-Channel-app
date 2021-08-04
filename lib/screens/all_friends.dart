@@ -103,7 +103,7 @@ class _HomeScreenState extends State<AllFriends> {
               .get(),
           builder: (context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting)
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             QuerySnapshot data = snapshot.data;
 
             print(data.docs.length);

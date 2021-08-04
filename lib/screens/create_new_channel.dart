@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_utopia/actions/actions.dart';
 import 'package:flutter_application_utopia/const/commonColor.dart';
@@ -84,6 +85,7 @@ class _HomeScreenState extends State<CreateNewChannel> {
                       });
 
                       createnewChannel(channelController.text, widget.name);
+
                       setState(() {
                         isLoading = false;
                       });

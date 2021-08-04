@@ -1,18 +1,48 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_utopia/const/commonColor.dart';
+import 'package:flutter_application_utopia/model/message.dart';
 import 'package:flutter_application_utopia/screens/addafriendscreen.dart';
 import 'package:flutter_application_utopia/screens/invite.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MessageScreen extends StatefulWidget {
-  final channelName;
-  const MessageScreen({Key? key, this.channelName}) : super(key: key);
+  final channelName, servername;
+  const MessageScreen({Key? key, this.channelName, this.servername})
+      : super(key: key);
 
   @override
   _MessageScreenState createState() => _MessageScreenState();
 }
 
 class _MessageScreenState extends State<MessageScreen> {
+  List membersData = [];
+  final _messageController = TextEditingController();
+  atStart() async {
+    var data = await FirebaseFirestore.instance
+        .collection("member")
+        .where("server", isEqualTo: widget.servername)
+        .where("channel", isEqualTo: widget.channelName)
+        .get();
+    data.docs.forEach((element) async {
+      var userData = await FirebaseFirestore.instance
+          .collection("users")
+          .where("email", isEqualTo: element.data()['member'])
+          .get();
+      print(userData.docs.first.data());
+      membersData.add(userData.docs.first.data());
+
+      setState(() {});
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    atStart();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,13 +83,23 @@ class _MessageScreenState extends State<MessageScreen> {
               ),
               Expanded(
                 child: ListView.builder(
-                    itemCount: 5,
+                    itemCount: membersData.length,
                     itemBuilder: (ctx, index) {
                       return Container(
                         padding: EdgeInsets.only(left: 20, bottom: 10),
-                        child: Text(
-                          "Member $index",
-                          style: TextStyle(color: Colors.white),
+                        child: ListTile(
+                          leading: Text(
+                            "${index + 1}",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          title: Text(
+                            "${membersData[index]['username']}",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          subtitle: Text(
+                            "${membersData[index]['email']}",
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       );
                     }),
@@ -74,46 +114,88 @@ class _MessageScreenState extends State<MessageScreen> {
         child: Column(
           children: [
             Expanded(
-              child: ListView.builder(
-                itemCount: 2,
-                itemBuilder: (ctx, index) {
-                  return Container(
-                    child: listCard(index, index % 2 == 0),
-                  );
-                },
-              ),
+              child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection("message")
+                      .where("server", isEqualTo: widget.servername)
+                      .where("channel", isEqualTo: widget.channelName)
+                      .orderBy("timestamp", descending: true)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting)
+                      return Center(
+                        child: CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.black)),
+                      );
+                    if (snapshot.hasData)
+                      return ListView.builder(
+                        itemCount: 2,
+                        itemBuilder: (ctx, index) {
+                          return Container(
+                            child: listCard(index, index % 2 == 0),
+                          );
+                        },
+                      );
+                    else
+                      return Center(
+                        child: Text("Write A First Message ... "),
+                      );
+                  }),
             ),
-            Container(
-              height: 50,
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.photo),
-                  ),
-                  Flexible(
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        suffixIcon: IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.send,
-                              color: Colors.blue,
-                            )),
-                        hintText: "Message",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                height: 50,
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(Icons.photo),
+                    ),
+                    Flexible(
+                      child: TextFormField(
+                        controller: _messageController,
+                        decoration: InputDecoration(
+                          suffixIcon: IconButton(
+                              onPressed: () {
+                                sendMessage();
+                              },
+                              icon: Icon(
+                                Icons.send,
+                                color: Colors.blue,
+                              )),
+                          hintText: "Message",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
                         ),
                       ),
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  sendMessage() async {
+    print("enter");
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String email = pref.getString('email') ?? "";
+    var msg = Message(
+      channel: widget.channelName,
+      server: widget.servername,
+      fromEmail: email,
+      message: _messageController.text,
+      timestamp: DateTime.now().toString(),
+    ).toMap();
+    await FirebaseFirestore.instance.collection("message").add(msg);
+    _messageController.text = "";
+    setState(() {});
   }
 
   listCard(index, bool fromMe) {
