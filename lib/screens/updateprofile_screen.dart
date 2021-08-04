@@ -25,11 +25,29 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _phonenumberController = TextEditingController();
+<<<<<<< HEAD
   TextEditingController _passwordController = TextEditingController();
   String docID = '';
   String dob = "";
   String gender = "";
   bool isAllowed = false;
+=======
+  // TextEditingController _passwordController = TextEditingController();
+  var imageUrl = 'null';
+  atStart() async {
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // pref.setString("email", User.email);
+    // );
+    final ref = FirebaseStorage.instance
+        .ref()
+        .child('profileimages')
+        .child('f@gmail.com');
+// no need of the file extension, the name will do fine.
+    var url = await ref.getDownloadURL();
+    imageUrl = url;
+    print(url);
+  }
+>>>>>>> f464b18907e967179f99956fc07b9a660bb80b12
 
   @override
   void initState() {
@@ -84,7 +102,13 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                         child: Center(
                           child: CircleAvatar(
                             radius: 62,
+<<<<<<< HEAD
                             backgroundImage: NetworkImage(widget.url),
+=======
+                            backgroundImage:
+                                //AssetImage("assets/images/splash.png"),
+                                NetworkImage('$imageUrl'),
+>>>>>>> f464b18907e967179f99956fc07b9a660bb80b12
                             backgroundColor: Colors.grey,
                           ),
                         ),
@@ -225,6 +249,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
       ),
     );
   }
+<<<<<<< HEAD
 
   atStart() async {
     var dataUser = await FirebaseFirestore.instance
@@ -242,4 +267,6 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
     print(docID);
     setState(() {});
   }
+=======
+>>>>>>> f464b18907e967179f99956fc07b9a660bb80b12
 }

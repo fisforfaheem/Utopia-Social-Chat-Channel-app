@@ -1,6 +1,10 @@
 // ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+<<<<<<< HEAD
 import 'package:firebase_auth/firebase_auth.dart';
+=======
+import 'package:firebase_storage/firebase_storage.dart';
+>>>>>>> f464b18907e967179f99956fc07b9a660bb80b12
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_utopia/actions/actions.dart';
@@ -22,6 +26,7 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+<<<<<<< HEAD
   String url = "", username = '', email = '';
   bool isLoading = false;
   atStart() async {
@@ -36,6 +41,21 @@ class _SettingPageState extends State<SettingPage> {
     url = ref;
     isLoading = false;
     setState(() {});
+=======
+  var imageUrl = 'null';
+  atStart() async {
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // pref.setString("email", User.email);
+    // );
+    final ref = FirebaseStorage.instance
+        .ref()
+        .child('profileimages')
+        .child('f@gmail.com');
+// no need of the file extension, the name will do fine.
+    var url = await ref.getDownloadURL();
+    imageUrl = url;
+    print(url);
+>>>>>>> f464b18907e967179f99956fc07b9a660bb80b12
   }
 
   @override
@@ -83,6 +103,7 @@ class _SettingPageState extends State<SettingPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+<<<<<<< HEAD
               isLoading
                   ? CircularProgressIndicator()
                   : Container(
@@ -121,6 +142,41 @@ class _SettingPageState extends State<SettingPage> {
                             ),
                           ),
                         ],
+=======
+              Container(
+                width: size.width,
+                height: 230,
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                ),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 15,
+                    ),
+                    CircleAvatar(
+                      backgroundColor: Colors.black,
+                      radius: 88,
+                      child: Center(
+                        child: CircleAvatar(
+                          radius: 86,
+                          backgroundImage: NetworkImage('$imageUrl'),
+                          backgroundColor: Colors.grey,
+                        ),
+                      ),
+                    ),
+                    // SizedBox(
+                    //   height: 10,
+                    // ),
+                    Text(
+                      'User Name',
+                      style: TextStyle(
+                        fontFamily: 'Lexend Deca',
+                        color: Colors.black,
+                        fontSize: 23,
+                        fontWeight: FontWeight.bold,
+>>>>>>> f464b18907e967179f99956fc07b9a660bb80b12
                       ),
                     ),
               Container(
@@ -247,7 +303,7 @@ class _SettingPageState extends State<SettingPage> {
                                 width: 5,
                               ),
                               Text(
-                                ' 🚀  Boost',
+                                '🚀  Boost',
                                 style: TextStyle(
                                   fontFamily: 'Lexend Deca',
                                   color: Colors.black,
