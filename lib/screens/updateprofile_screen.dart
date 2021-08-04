@@ -27,6 +27,21 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _phonenumberController = TextEditingController();
   // TextEditingController _passwordController = TextEditingController();
+  var imageUrl = 'null';
+  atStart() async {
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // var userId = prefs.getString(
+    //   "uid",
+    // );
+    final ref = FirebaseStorage.instance
+        .ref()
+        .child('profileimages')
+        .child('f@gmail.com');
+// no need of the file extension, the name will do fine.
+    var url = await ref.getDownloadURL();
+    imageUrl = url;
+    print(url);
+  }
 
   @override
   void initState() {
@@ -80,7 +95,8 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                           child: CircleAvatar(
                             radius: 62,
                             backgroundImage:
-                                AssetImage("assets/images/splash.png"),
+                                //AssetImage("assets/images/splash.png"),
+                                NetworkImage('$imageUrl'),
                             backgroundColor: Colors.grey,
                           ),
                         ),
@@ -169,13 +185,17 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
   }
 }
 
-atStart() async {
-  // SharedPreferences prefs = await SharedPreferences.getInstance();
-  // var userId = prefs.getString(
-  //   "uid",
-  // );
-  final ref = FirebaseStorage.instance.ref().child('profileimages');
-// no need of the file extension, the name will do fine.
-  var url = await ref.getDownloadURL();
-  print(url);
-}
+// atStart() async {
+//   // SharedPreferences prefs = await SharedPreferences.getInstance();
+//   // var userId = prefs.getString(
+//   //   "uid",
+//   // );
+//   final ref = FirebaseStorage.instance
+//       .ref()
+//       .child('/profileimages')
+//       .child('f@gmail.com');
+// // no need of the file extension, the name will do fine.
+//   var url = await ref.getDownloadURL();
+//   imageUrl = url;
+//   print(url);
+// }
