@@ -16,6 +16,7 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   final searchController = TextEditingController();
   List<Search> data = [];
+  bool isLoading = false;
   atStart() async {
     if (widget.searchText != null) {
       searchController.text = widget.searchText;
@@ -74,16 +75,26 @@ class _SearchScreenState extends State<SearchScreen> {
                                 title: Text(" ${data[index].name}"),
                                 subtitle:
                                     Text(" ${data[index].type.split(' ')[0]}"),
-                                trailing:
-                                    data[index].type.split(' ')[0] == "user"
-                                        ? IconButton(
-                                            onPressed: () {},
+                                trailing: data[index].type.split(' ')[0] ==
+                                        "user"
+                                    ? isLoading
+                                        ? Icon(Icons.done_all_outlined)
+                                        : IconButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                isLoading = true;
+                                              });
+                                              addFiendAction(
+                                                ".",
+                                                data[index].type,
+                                              );
+                                            },
                                             icon: Icon(Icons.person_add_alt),
                                           )
-                                        : IconButton(
-                                            onPressed: () {},
-                                            icon: Icon(Icons.done_all),
-                                          ),
+                                    : IconButton(
+                                        onPressed: () {},
+                                        icon: Icon(Icons.done_all),
+                                      ),
                               );
                             }),
                       ),
@@ -100,6 +111,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   onChanged(data1) {
     data = data1;
+    isLoading = false;
     setState(() {});
   }
 }

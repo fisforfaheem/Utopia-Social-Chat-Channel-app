@@ -43,9 +43,39 @@ funcSignUp(email, pass, Map<String, dynamic> userJson) async {
   }
 }
 
+// add friend
+addFiendAction(fromemail, toemail) async {
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  String email = pref.getString("email")?.toString() ?? "";
+  print("\n\n\n\\n\n\n");
+
+  print(toemail);
+  toemail =
+      toemail.toString().toString().split(',')[5].replaceAll("email: ", "");
+  if (email != "" && email != "null" && email != null)
+    await FirebaseFirestore.instance.collection("friends").add({
+      "fromEmail": email.toString(),
+      "toemail": toemail.toString(),
+    });
+}
+
+Future<List> getAllFriends() async {
+  var alreadyFriends =
+      await FirebaseFirestore.instance.collection("friends").get();
+  List data = [];
+  alreadyFriends.docs.forEach((element) {
+    data.add(element.data());
+  });
+  return data;
+}
+
 ///searching
 Future<List<Search>> getSearch(txt) async {
   List<Search> data = [];
+
+  var alreadyFriends =
+      await FirebaseFirestore.instance.collection("friends").get();
+
   var isfound = await FirebaseFirestore.instance
       .collection("channel")
       .where("name", isGreaterThanOrEqualTo: txt)
@@ -53,8 +83,15 @@ Future<List<Search>> getSearch(txt) async {
   //print(isfound);
   if (isfound.docs.length > 0) {
     isfound.docs.forEach((element) {
-      data.add(Search(
-          name: element.data()['name'], type: "channel  ${element.data()}"));
+      var abc = null;
+      if (alreadyFriends.docs.length > 0)
+        try {
+          abc = alreadyFriends.docs.firstWhere(
+              (fe) => fe.data()['toemail'] == element.data()['name']);
+        } catch (e) {}
+      if (abc == null)
+        data.add(Search(
+            name: element.data()['name'], type: "channel  ${element.data()}"));
     });
   }
   isfound = await FirebaseFirestore.instance
@@ -63,8 +100,15 @@ Future<List<Search>> getSearch(txt) async {
       .get();
   if (isfound.docs.length > 0) {
     isfound.docs.forEach((element) {
-      data.add(Search(
-          name: element.data()['name'], type: "server ${element.data()}"));
+      var abc = null;
+      if (alreadyFriends.docs.length > 0)
+        try {
+          abc = alreadyFriends.docs.firstWhere(
+              (fe) => fe.data()['toemail'] == element.data()['name']);
+        } catch (e) {}
+      if (abc == null)
+        data.add(Search(
+            name: element.data()['name'], type: "server ${element.data()}"));
     });
   }
 
@@ -83,9 +127,18 @@ Future<List<Search>> getSearch(txt) async {
 
   documents.forEach((element) {
     var d = jsonEncode(element.data()!);
-    print(d);
-    if (d != email)
-      data.add(Search(name: element['username'], type: "user $element"));
+    var jsonData = jsonDecode(d);
+    print(jsonData);
+    if (jsonData.toString().contains(txt)) if (jsonData['email'] != email) {
+      var abc = null;
+      if (alreadyFriends.docs.length > 0)
+        try {
+          abc = alreadyFriends.docs
+              .firstWhere((fe) => fe.data()['toemail'] == jsonData['email']);
+        } catch (e) {}
+      if (abc == null)
+        data.add(Search(name: jsonData['username'], type: "user $jsonData"));
+    }
   });
 
   //  => ;

@@ -1,4 +1,8 @@
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_utopia/actions/actions.dart';
 import 'package:flutter_application_utopia/const/navBar.dart';
 import 'package:flutter_application_utopia/const/commonColor.dart';
 import 'package:flutter_application_utopia/screens/addafriendscreen.dart';
@@ -59,33 +63,71 @@ class _HomeScreenState extends State<AllFriends> {
             height: 20,
           ),
           Expanded(
-              child: ListView.builder(
-                  itemCount: 3,
-                  itemBuilder: (ctx, index) {
-                    return listCard(index);
-                  })),
+            child: FutureBuilder(
+                future: FirebaseFirestore.instance.collection("friends").get(),
+                builder: (context, AsyncSnapshot snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting)
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  if (snapshot.hasData) {
+                    QuerySnapshot data = snapshot.data;
+                    print(data);
+                    return ListView.builder(
+                        itemCount: data.docs.length,
+                        itemBuilder: (ctx, index) {
+                          return listCard(index, data.docs[index]);
+                        });
+                  } else
+                    return Center(
+                      child: Text("Empty ...."),
+                    );
+                }),
+          ),
         ],
       ),
     );
   }
 
-  listCard(index) {
+  listCard(index, jsonMap) {
+    print(jsonMap['toemail']);
     return Container(
       color: grey.withOpacity(0.27),
       padding: EdgeInsets.symmetric(vertical: 7),
       margin: EdgeInsets.symmetric(horizontal: 20, vertical: 7),
-      child: ListTile(
-        onTap: () {
-          // Get.to(MessageScreen());
-        },
-        leading: CircleAvatar(
-          backgroundImage: AssetImage("assets/images/splash.png"),
-        ),
-        title: Text(
-          "Friend ${index + 1}",
-          style: TextStyle(color: Colors.black),
-        ),
-      ),
+      child: FutureBuilder(
+          future: FirebaseFirestore.instance
+              .collection("users")
+              .where("email",
+                  isEqualTo: jsonMap['toemail'].toString().replaceAll(" ", ''))
+              .get(),
+          builder: (context, AsyncSnapshot snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting)
+              return CircularProgressIndicator();
+            QuerySnapshot data = snapshot.data;
+
+            print(data.docs.length);
+            var abc = data.docs[0].data();
+            var JsonD = jsonEncode(abc);
+            var jsonE = jsonDecode(JsonD);
+            if (snapshot.hasData)
+              return ListTile(
+                onTap: () {
+                  // Get.to(MessageScreen());
+                },
+                leading: CircleAvatar(
+                  backgroundImage: AssetImage("assets/images/splash.png"),
+                ),
+                title: Text("${jsonE['username']}"),
+                subtitle: Text(
+                  "${jsonMap['toemail']}",
+                  style: TextStyle(color: Colors.black),
+                ),
+              );
+            else {
+              return Text("Not FOund");
+            }
+          }),
     );
   }
 }
