@@ -19,7 +19,9 @@ class MessageScreen extends StatefulWidget {
 class _MessageScreenState extends State<MessageScreen> {
   List membersData = [];
   final _messageController = TextEditingController();
+  
   atStart() async {
+    //print("message");
     var data = await FirebaseFirestore.instance
         .collection("member")
         .where("server", isEqualTo: widget.servername)
