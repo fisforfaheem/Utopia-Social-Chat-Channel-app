@@ -1,0 +1,352 @@
+repo_name: fisforfaheem/Utopia-Social-Chat-Channel-app
+report_id: e80abc441244ea271b809e6e5f8627cd
+repo_type: Public
+timestamp: '2023-11-10T06:51:09+00:00'
+requested_by: FaizanUllahDev
+provider: github
+branch: main
+detected_tools_count: 28
+tools:
+- name: Dart
+  description: A new web programming language with libraries, a virtual machine, and
+    tools
+  website_url: https://www.dartlang.org/
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/1646/Twitter-02.png
+  detection_source: Repo Metadata
+- name: Kotlin
+  description: Statically typed Programming Language targeting JVM and JavaScript
+  website_url: https://kotlinlang.org/
+  open_source: true
+  hosted_saas: true
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/3750/pCfEzr6L.png
+  detection_source: Repo Metadata
+- name: Objective-C
+  description: The primary programming language you use when writing software for
+    OS X and iOS
+  website_url: https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ProgrammingWithObjectiveC/Introduction/Introduction.html
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/1008/xcode.png
+  detection_source: Repo Metadata
+- name: Ruby
+  description: A dynamic, interpreted, open source programming language with a focus
+    on simplicity and productivity
+  website_url: https://www.ruby-lang.org
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/989/ruby.png
+  detection_source: pubspec.yaml
+  last_updated_by: faizanmehar
+  last_updated_on: 2021-07-31 11:10:11.000000000 Z
+- name: Swift
+  description: 'An innovative new programming language for Cocoa and Cocoa Touch. '
+  website_url: https://developer.apple.com/swift/
+  license: Apache-2.0
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/1009/tuHsaI2U.png
+  detection_source: Repo Metadata
+- name: Android SDK
+  description: An SDK that provides you the API libraries and developer tools necessary
+    to build, test, and debug apps for Android.
+  website_url: http://developer.android.com
+  version: '30.0'
+  open_source: false
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Frameworks (Full Stack)
+  image_url: https://img.stackshare.io/service/1010/m8jf0po4imu8t5eemjdd.png
+  detection_source_url: android/app/build.gradle
+  detection_source: android/app/build.gradle
+  last_updated_by: faizanmehar
+  last_updated_on: 2021-07-31 11:10:11.000000000 Z
+- name: Flutter
+  description: Cross-platform mobile framework from Google
+  website_url: https://flutter.io/
+  license: BSD-3-Clause
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Cross-Platform Mobile Development
+  image_url: https://img.stackshare.io/service/7180/flutter-mark-square-100.png
+  detection_source: pubspec.yaml
+  last_updated_by: faizanmehar
+  last_updated_on: 2021-08-01 12:43:13.000000000 Z
+- name: Git
+  description: Fast, scalable, distributed revision control system
+  website_url: http://git-scm.com/
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Version Control System
+  image_url: https://img.stackshare.io/service/1046/git.png
+  detection_source: Repo Metadata
+- name: Gradle
+  description: A powerful build system for the JVM
+  website_url: https://www.gradle.org/
+  license: Apache-2.0
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Java Build Tools
+  image_url: https://img.stackshare.io/service/975/gradlephant-social-black-bg.png
+  detection_source: android/app/build.gradle
+  last_updated_by: faizanmehar
+  last_updated_on: 2021-07-31 11:10:11.000000000 Z
+- name: RubyGems
+  description: Easily download, install, and use ruby software packages on your system
+  website_url: https://rubygems.org/
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/service/12795/5jL6-BA5_400x400.jpeg
+  detection_source: pubspec.yaml
+  last_updated_by: faizanmehar
+  last_updated_on: 2021-07-31 11:10:11.000000000 Z
+- name: Android OS
+  description: An open source mobile operating system by Google
+  website_url: https://www.android.com
+  version: '11.0'
+  open_source: false
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Operating Systems
+  image_url: https://img.stackshare.io/service/9586/ZvmtaSXW_400x400.jpg
+  detection_source_url: android/app/build.gradle
+  detection_source: android/app/build.gradle
+  last_updated_by: faizanmehar
+  last_updated_on: 2021-07-31 11:10:11.000000000 Z
+- name: cached_network_image
+  description: Flutter library to load and cache network images
+  package_url: https://pub.dartlang.org/cached_network_image
+  version: 3.1.0
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/pub/image.png
+  detection_source_url: pubspec.lock
+  detection_source: pubspec.yaml
+  last_updated_by: faizanmehar
+  last_updated_on: 2021-08-01 14:45:56.000000000 Z
+- name: cloud_firestore
+  description: Flutter plugin for Cloud Firestore
+  package_url: https://pub.dartlang.org/cloud_firestore
+  version: 2.4.0
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/pub/image.png
+  detection_source_url: pubspec.lock
+  detection_source: pubspec.yaml
+  last_updated_by: Faheem Ahmad
+  last_updated_on: 2021-08-01 09:23:51.000000000 Z
+- name: cupertino_icons
+  description: Default icons asset for Cupertino widgets based on Apple styled icons
+  package_url: https://pub.dartlang.org/cupertino_icons
+  version: 1.0.3
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/pub/image.png
+  detection_source_url: pubspec.lock
+  detection_source: pubspec.yaml
+  last_updated_by: faizanmehar
+  last_updated_on: 2021-07-31 11:10:11.000000000 Z
+- name: email_validator
+  description: A simple
+  package_url: https://pub.dartlang.org/email_validator
+  version: 2.0.1
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/pub/image.png
+  detection_source_url: pubspec.lock
+  detection_source: pubspec.yaml
+  last_updated_by: Faheem Ahmad
+  last_updated_on: 2021-08-01 09:23:51.000000000 Z
+- name: file_picker
+  description: A package that allows you to use a native file explorer to pick single
+    or multiple absolute file paths
+  package_url: https://pub.dartlang.org/file_picker
+  version: 3.0.4
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/pub/image.png
+  detection_source_url: pubspec.lock
+  detection_source: pubspec.yaml
+  last_updated_by: faizanmehar
+  last_updated_on: 2021-08-01 12:43:13.000000000 Z
+- name: firebase_analytics
+  description: Flutter plugin for Google Analytics for Firebase
+  package_url: https://pub.dartlang.org/firebase_analytics
+  version: 5.0.15
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/pub/image.png
+  detection_source_url: pubspec.lock
+  detection_source: pubspec.yaml
+  last_updated_by: Faheem Ahmad
+  last_updated_on: 2021-08-01 09:23:51.000000000 Z
+- name: firebase_auth
+  description: Flutter plugin for Firebase Auth
+  package_url: https://pub.dartlang.org/firebase_auth
+  version: 3.0.1
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/pub/image.png
+  detection_source_url: pubspec.lock
+  detection_source: pubspec.yaml
+  last_updated_by: Faheem Ahmad
+  last_updated_on: 2021-08-01 09:23:51.000000000 Z
+- name: firebase_core
+  description: Flutter plugin for Firebase Core
+  package_url: https://pub.dartlang.org/firebase_core
+  version: 1.4.0
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/pub/image.png
+  detection_source_url: pubspec.lock
+  detection_source: pubspec.yaml
+  last_updated_by: Faheem Ahmad
+  last_updated_on: 2021-08-01 09:23:51.000000000 Z
+- name: firebase_storage
+  description: Flutter plugin for Firebase Cloud Storage
+  package_url: https://pub.dartlang.org/firebase_storage
+  version: 10.0.1
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/pub/image.png
+  detection_source_url: pubspec.lock
+  detection_source: pubspec.yaml
+  last_updated_by: Faheem Ahmad
+  last_updated_on: 2021-08-01 09:23:51.000000000 Z
+- name: flutter
+  description: Visit flutter.io to get started
+  package_url: https://pub.dartlang.org/flutter
+  version: 0.0.0
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/pub/image.png
+  detection_source_url: pubspec.lock
+  detection_source: pubspec.yaml
+  last_updated_by: faizanmehar
+  last_updated_on: 2021-08-01 12:43:13.000000000 Z
+- name: flutter_datetime_picker
+  description: A date time picker for flutter
+  package_url: https://pub.dartlang.org/flutter_datetime_picker
+  version: 1.5.1
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/pub/image.png
+  detection_source_url: pubspec.lock
+  detection_source: pubspec.yaml
+  last_updated_by: faizanmehar
+  last_updated_on: 2021-08-01 12:43:13.000000000 Z
+- name: google_fonts
+  description: A Flutter package to use fonts from fonts.google.com
+  package_url: https://pub.dartlang.org/google_fonts
+  version: 2.1.0
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/pub/image.png
+  detection_source_url: pubspec.lock
+  detection_source: pubspec.yaml
+  last_updated_by: Faheem Ahmad
+  last_updated_on: 2021-08-01 09:23:51.000000000 Z
+- name: image_picker
+  description: Flutter plugin for selecting images from the Android and iOS image
+    library
+  package_url: https://pub.dartlang.org/image_picker
+  version: 0.8.2
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/pub/image.png
+  detection_source_url: pubspec.lock
+  detection_source: pubspec.yaml
+  last_updated_by: faizanmehar
+  last_updated_on: 2021-08-01 14:45:56.000000000 Z
+- name: line_icons
+  description: Another icon library
+  package_url: https://pub.dartlang.org/line_icons
+  version: 2.0.1
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/pub/image.png
+  detection_source_url: pubspec.lock
+  detection_source: pubspec.yaml
+  last_updated_by: faizanmehar
+  last_updated_on: 2021-07-31 11:10:11.000000000 Z
+- name: permission_handler
+  description: Permission plugin for Flutter
+  package_url: https://pub.dartlang.org/permission_handler
+  version: 8.1.4
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/pub/image.png
+  detection_source_url: pubspec.lock
+  detection_source: pubspec.yaml
+  last_updated_by: Faheem Ahmad
+  last_updated_on: 2021-08-01 09:23:51.000000000 Z
+- name: shared_preferences
+  description: Flutter plugin for reading and writing simple key-value pairs
+  package_url: https://pub.dartlang.org/shared_preferences
+  version: 2.0.6
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/pub/image.png
+  detection_source_url: pubspec.lock
+  detection_source: pubspec.yaml
+  last_updated_by: faizanmehar
+  last_updated_on: 2021-08-01 12:43:13.000000000 Z
+- name: org.jetbrains.kotlin:kotlin-stdlib-jdk7
+  description: Kotlin Standard Library JDK 7 extension
+  license: Apache-2.0
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: Maven Packages
+  image_url: https://img.stackshare.io/package/maven/image.png
+  detection_source: android/app/build.gradle
+  last_updated_by: faizanmehar
+  last_updated_on: 2021-07-31 11:10:11.000000000 Z
